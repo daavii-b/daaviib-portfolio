@@ -1,0 +1,13 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { DEFAULT_LOCALE } from '@/i18n/config';
+import { t } from '@/i18n/utils';
+
+const lang = DEFAULT_LOCALE;
+---
+
+<BaseLayout title={t(lang, 'now.title')}>
+  <h1 class="mb-6 text-3xl font-bold tracking-tight">{t(lang, 'now.title')}</h1>
+  <!-- TODO: what you are focused on right now (see nownownow.com). -->
+  <p class="text-ink-muted">Em breve.</p>
+</BaseLayout>

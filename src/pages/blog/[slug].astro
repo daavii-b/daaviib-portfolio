@@ -1,0 +1,52 @@
+---
+import { render } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { DEFAULT_LOCALE } from '@/i18n/config';
+import { formatDate, localizePath, t } from '@/i18n/utils';
+import { getPosts } from '@/lib/collections';
+import { findTranslation, readingTime } from '@/lib/content';
+
+export const getStaticPaths = (async () => {
+  const posts = await getPosts(DEFAULT_LOCALE);
+  const allLocales = [...posts]; // add other locales' posts here when they exist
+  return posts.map((post) => ({
+    params: { slug: post.data.slug },
+    props: { post, allLocales },
+  }));
+}) satisfies GetStaticPaths;
+
+const { post, allLocales } = Astro.props;
+const lang = post.data.lang;
+const { Content } = await render(post);
+const minutes = readingTime(post.body ?? '');
+
+const alternates = (['en'] as const)
+  .map((other) => findTranslation(allLocales, post, other))
+  .filter((p) => p !== undefined)
+  .map((p) => ({ lang: p.data.lang, path: localizePath(`/blog/${p.data.slug}`, p.data.lang) }));
+---
+
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  type="article"
+  publishedAt={post.data.publishedAt}
+  alternates={alternates}
+>
+  <article>
+    <header class="mb-8">
+      <h1 class="text-3xl font-bold tracking-tight">{post.data.title}</h1>
+      <p class="mt-2 text-sm text-ink-muted">
+        {t(lang, 'blog.publishedOn')}
+        <time datetime={post.data.publishedAt.toISOString()}>
+          {formatDate(post.data.publishedAt, lang)}
+        </time>· {t(lang, 'blog.readingTime', { minutes })}
+      </p>
+    </header>
+    <div class="prose max-w-none dark:prose-invert">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>

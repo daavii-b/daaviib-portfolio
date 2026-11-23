@@ -1,0 +1,36 @@
+---
+import { HTML_LANG, type Locale } from '@/i18n/config';
+
+export interface Alternate {
+  lang: Locale;
+  path: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  lang: Locale;
+  alternates: Alternate[];
+  type: 'website' | 'article';
+  publishedAt?: Date | undefined;
+}
+
+const { title, description, lang, alternates, type, publishedAt } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+<link rel="alternate" hreflang={HTML_LANG[lang]} href={canonical} />
+{alternates.map((alt) => (
+  <link rel="alternate" hreflang={HTML_LANG[alt.lang]} href={new URL(alt.path, Astro.site)} />
+))}
+
+<meta property="og:type" content={type} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:locale" content={HTML_LANG[lang].replace('-', '_')} />
+<meta name="twitter:card" content="summary_large_image" />
+{publishedAt && <meta property="article:published_time" content={publishedAt.toISOString()} />}

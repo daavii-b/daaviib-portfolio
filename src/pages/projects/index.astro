@@ -1,0 +1,23 @@
+---
+import ProjectCard from '@/components/ProjectCard.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { DEFAULT_LOCALE } from '@/i18n/config';
+import { t } from '@/i18n/utils';
+import { getProjects } from '@/lib/collections';
+
+const lang = DEFAULT_LOCALE;
+const projects = await getProjects(lang);
+---
+
+<BaseLayout title={t(lang, 'projects.title')} description={t(lang, 'projects.description')}>
+  <h1 class="mb-8 text-3xl font-bold tracking-tight">{t(lang, 'projects.title')}</h1>
+  {projects.length === 0 ? (
+    <p class="text-ink-muted">{t(lang, 'projects.empty')}</p>
+  ) : (
+    <div class="grid gap-4 sm:grid-cols-2">
+      {projects.map((project) => (
+        <ProjectCard project={project} lang={lang} />
+      ))}
+    </div>
+  )}
+</BaseLayout>

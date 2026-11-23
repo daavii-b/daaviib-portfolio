@@ -1,0 +1,30 @@
+# build output
+dist/
+.astro/
+.vercel/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+pnpm-debug.log*
+
+# env
+.env
+.env.*
+!.env.example
+
+# tests & reports
+coverage/
+playwright-report/
+test-results/
+.lighthouseci/
+
+# editors / OS
+.DS_Store
+.idea/
+*.swp
+
+# Claude Code local settings
+.claude/settings.local.json

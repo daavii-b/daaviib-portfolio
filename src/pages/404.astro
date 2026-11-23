@@ -1,0 +1,16 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { DEFAULT_LOCALE } from '@/i18n/config';
+import { localizePath, t } from '@/i18n/utils';
+
+const lang = DEFAULT_LOCALE;
+---
+
+<BaseLayout title={t(lang, 'notFound.title')}>
+  <h1 class="text-3xl font-bold tracking-tight">{t(lang, 'notFound.title')}</h1>
+  <p class="mt-4">
+    <a href={localizePath('/', lang)} class="text-accent underline">
+      {t(lang, 'notFound.back')}
+    </a>
+  </p>
+</BaseLayout>

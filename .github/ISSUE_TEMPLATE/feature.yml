@@ -1,0 +1,22 @@
+name: Feature
+description: A new capability — becomes a spec via /speckit-specify
+labels: [feature]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / user need
+      description: Who needs this and why? Describe the "what", not the "how".
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      placeholder: |
+        - Given ..., when ..., then ...
+  - type: dropdown
+    id: phase
+    attributes:
+      label: Roadmap phase
+      options: ['1 - Foundation', '2 - Portfolio + Blog', '3 - Newsletter', '4 - Evolution']
