@@ -19,3 +19,11 @@ export function resolveInternalLink(
   if (href.startsWith('/') && publishedPaths.has(normalizePath(href))) return href;
   return undefined;
 }
+
+/**
+ * Public path of a page from `Astro.url.pathname`, which includes `.html` during the build with
+ * `build.format: 'file'`: `/about.html` → `/about`, `/index.html` → `/`, `/en/index.html` → `/en`.
+ */
+export function canonicalPath(pathname: string): string {
+  return normalizePath(pathname.replace(/\.html$/, '').replace(/(^|\/)index$/, '$1'));
+}

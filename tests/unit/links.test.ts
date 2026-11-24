@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { normalizePath, resolveInternalLink } from '@/lib/links';
+import { canonicalPath, normalizePath, resolveInternalLink } from '@/lib/links';
 
 const published = new Set(['/', '/projects', '/projects/este-site', '/now']);
 
@@ -39,5 +39,19 @@ describe('normalizePath', () => {
     ['/now?x=1#y', '/now'],
   ])('%s → %s', (input, expected) => {
     expect(normalizePath(input)).toBe(expected);
+  });
+});
+
+describe('canonicalPath', () => {
+  it.each([
+    ['/index.html', '/'],
+    ['/', '/'],
+    ['/about.html', '/about'],
+    ['/about', '/about'],
+    ['/blog/por-que-escolhi-astro.html', '/blog/por-que-escolhi-astro'],
+    ['/en/index.html', '/en'],
+    ['/blog/', '/blog'],
+  ])('%s → %s', (input, expected) => {
+    expect(canonicalPath(input)).toBe(expected);
   });
 });
