@@ -33,6 +33,11 @@ describe('blogPostingJsonLd', () => {
     const data = blogPostingJsonLd({ ...base, updatedAt: new Date('2026-12-01T00:00:00Z') });
     expect(data['dateModified']).toBe('2026-12-01T00:00:00.000Z');
   });
+
+  it('includes the share image when given', () => {
+    const image = 'https://example.com/og/blog/por-que-escolhi-astro.png';
+    expect(blogPostingJsonLd({ ...base, image })['image']).toBe(image);
+  });
 });
 
 describe('serializeJsonLd', () => {

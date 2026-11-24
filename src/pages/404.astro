@@ -6,7 +6,7 @@ import { localizePath, t } from '@/i18n/utils';
 const lang = DEFAULT_LOCALE;
 ---
 
-<BaseLayout title={t(lang, 'notFound.title')}>
+<BaseLayout title={t(lang, 'notFound.title')} description={t(lang, 'notFound.description')}>
   <div class="mx-auto max-w-measure px-5 pt-12 pb-24 md:px-10 md:pt-24">
     <h1 class="text-display-lg">{t(lang, 'notFound.title')}</h1>
     <p class="mt-4">

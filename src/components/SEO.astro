@@ -1,6 +1,7 @@
 ---
 import { HTML_LANG, type Locale } from '@/i18n/config';
 import { canonicalPath } from '@/lib/links';
+import { OG_SIZE } from '@/lib/og';
 
 export interface Alternate {
   lang: Locale;
@@ -14,9 +15,11 @@ interface Props {
   alternates: Alternate[];
   type: 'website' | 'article';
   publishedAt?: Date | undefined;
+  /** Share image (Open Graph): absolute URL and alternative text. */
+  image: { url: string; alt: string };
 }
 
-const { title, description, lang, alternates, type, publishedAt } = Astro.props;
+const { title, description, lang, alternates, type, publishedAt, image } = Astro.props;
 const canonical = new URL(canonicalPath(Astro.url.pathname), Astro.site);
 ---
 
@@ -33,5 +36,12 @@ const canonical = new URL(canonicalPath(Astro.url.pathname), Astro.site);
 <meta property="og:description" content={description} />
 <meta property="og:url" content={canonical} />
 <meta property="og:locale" content={HTML_LANG[lang].replace('-', '_')} />
+<meta property="og:image" content={image.url} />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:width" content={String(OG_SIZE.width)} />
+<meta property="og:image:height" content={String(OG_SIZE.height)} />
+<meta property="og:image:alt" content={image.alt} />
 <meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content={image.url} />
+<meta name="twitter:image:alt" content={image.alt} />
 {publishedAt && <meta property="article:published_time" content={publishedAt.toISOString()} />}

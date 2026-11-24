@@ -10,6 +10,8 @@ export interface BlogPostingInput {
   tags: string[];
   lang: Locale;
   author: { name: string; url: string };
+  /** Absolute URL of the share image. */
+  image?: string | undefined;
 }
 
 /** schema.org `BlogPosting` for an article page. */
@@ -26,6 +28,7 @@ export function blogPostingJsonLd(input: BlogPostingInput): Record<string, unkno
     inLanguage: HTML_LANG[input.lang],
     keywords: input.tags.join(', '),
     author: { '@type': 'Person', name: input.author.name, url: input.author.url },
+    ...(input.image ? { image: input.image } : {}),
   };
 }
 

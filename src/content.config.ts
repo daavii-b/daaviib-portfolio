@@ -21,7 +21,7 @@ const posts = defineCollection({
     z.object({
       ...localized,
       title: z.string().min(1).max(100),
-      description: z.string().min(1).max(200),
+      description: z.string().min(1).max(160),
       publishedAt: z.coerce.date(),
       updatedAt: z.coerce.date().optional(),
       tags: z.array(z.string()).default([]),
@@ -42,7 +42,7 @@ const projects = defineCollection({
     z.object({
       ...localized,
       name: z.string().min(1),
-      summary: z.string().min(1).max(200),
+      summary: z.string().min(1).max(160),
       status: z.enum(['active', 'paused', 'done']),
       stack: z.array(z.string()).default([]),
       links: z
