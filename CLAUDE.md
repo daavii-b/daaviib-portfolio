@@ -40,6 +40,14 @@ before planning any change — it is the source of truth for principles and qual
 - Every new page gets an entry in `tests/e2e/site.spec.ts` (renders + axe).
 - Repository docs and code are in English; site content is in Portuguese first.
 
+## Astro knowledge
+
+- MCP server `astro-docs` (`.mcp.json`, official, https://mcp.docs.astro.build/mcp): search the current Astro docs.
+  Use it for anything version-specific — this project runs **Astro 7**.
+- Skills `astro-framework` (reference + rules) and `learning-astro` (interactive tutorial) come from
+  [delineas/astro-framework-agents](https://github.com/delineas/astro-framework-agents) (MIT). They were written for
+  Astro 5+; when they disagree with the docs MCP or with this repo's code, the MCP and the repo win.
+
 ## Project skills
 
 - `new-post` — create a blog post with valid frontmatter.
