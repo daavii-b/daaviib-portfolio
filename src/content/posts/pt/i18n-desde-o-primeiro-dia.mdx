@@ -3,7 +3,7 @@ lang: pt
 translationKey: i18n-from-day-one
 slug: i18n-desde-o-primeiro-dia
 title: i18n desde o primeiro dia, com um idioma só
-description: O site só tem português, mas já nasceu pronto para o inglês. Rotas em inglês, slugs traduzidos e uma chave que liga as versões de cada artigo.
+description: O site só tem português, mas já nasceu pronto para o inglês. Rotas em inglês, um slug por versão e uma chave que liga os dois idiomas de cada artigo.
 publishedAt: 2026-12-01
 tags: [astro, i18n]
 series: Construindo este site
@@ -19,11 +19,11 @@ O problema é que "depois" quer dizer mudar URLs que já foram compartilhadas e 
 Então decidi o formato das URLs antes do primeiro artigo:
 
 - Português é o idioma padrão e não tem prefixo: `/blog/por-que-escolhi-astro`.
-- Inglês fica em `/en`, com o slug traduzido. Quando este artigo tiver versão em inglês, vai ser algo como
-  `/en/blog/why-i-chose-astro`.
-- Os segmentos de rota são sempre em inglês (`blog`, `projects`, `about`). Só o slug é traduzido.
+- Inglês fica em `/en`: `/en/blog/...`.
+- Os segmentos de rota são sempre em inglês (`blog`, `projects`, `about`).
 
-{/* TODO(autor): por que slugs traduzidos e não o mesmo slug nos dois idiomas? Escreva a razão com suas palavras. */}
+O slug de cada versão ainda está em aberto. Pode ser o mesmo nos dois idiomas ou traduzido. A estrutura abaixo
+aceita os dois, então posso decidir quando o primeiro post em inglês existir, sem mexer em código.
 
 ## Uma lista de idiomas, um lugar
 
@@ -59,14 +59,14 @@ Não uso biblioteca de i18n. O roteamento é o nativo do Astro, e os textos da i
 
 ## O slug mora no frontmatter
 
-O nome do arquivo não decide a URL. Cada artigo declara o próprio slug, e o schema garante o formato.
+O nome do arquivo não decide a URL. Cada versão declara o próprio slug, e o schema garante o formato. É isso que
+deixa a escolha entre slug igual e slug traduzido em aberto: ela fica no conteúdo, não no código.
 
 ```ts title="src/content.config.ts"
 const localized = {
   lang: z.enum(LOCALES),
   /** Shared key that links translations of the same item across locales. */
   translationKey: z.string().min(1),
-  /** Translated URL slug, e.g. `construindo-o-prumo` / `building-prumo`. */
   slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Slug must be kebab-case ASCII'),
 };
 ```
@@ -75,18 +75,19 @@ A regex barra acento e maiúscula. `construíndo-o-prumo` não passa no build, e
 meio.
 
 Os arquivos ficam separados por pasta de idioma, `posts/pt/` e `posts/en/`. Aqui tem uma pegadinha: quando o
-frontmatter tem `slug`, o loader `glob` usa esse campo como id da entrada. Um projeto chamado Prumo teria o slug
-`prumo` nos dois idiomas, e as duas entradas colidiriam. Por isso o id é o caminho do arquivo:
+frontmatter tem `slug`, o loader `glob` usa esse campo como id da entrada. Com o mesmo slug nos dois idiomas, as
+duas versões teriam o mesmo id e colidiriam. Por isso o id é o caminho do arquivo:
 
 ```ts title="src/content.config.ts"
 /** Entry id = path without extension (e.g. `pt/prumo`), so equal slugs in different locales never collide. */
 const generateId = ({ entry }: { entry: string }) => entry.replace(/\.(mdx?|json)$/, '');
 ```
 
-## Uma chave liga as traduções
+## Uma chave liga as versões
 
-Com slugs diferentes, `por-que-escolhi-astro` e `why-i-chose-astro` não têm nada em comum que o código consiga ver.
-O `translationKey` resolve isso. É uma chave em inglês, estável, repetida nas duas versões.
+O slug não serve para ligar as versões de um artigo. Se for traduzido, as duas versões não têm nada em comum que o
+código consiga ver. Se for igual, ainda pode mudar em uma delas depois. O `translationKey` é uma chave em inglês,
+estável, repetida nas duas versões, e é só ela que o código usa para achar a outra.
 
 ```ts title="src/lib/content.ts"
 export function findTranslation<T extends { data: { lang: Locale; translationKey: string } }>(
@@ -99,8 +100,8 @@ export function findTranslation<T extends { data: { lang: Locale; translationKey
 ```
 
 A página do artigo usa essa função para montar os `alternates`. O componente `SEO` transforma cada um em
-`<link rel="alternate" hreflang>`, e o seletor de idioma no cabeçalho usa a mesma lista. Quando um artigo ainda não tem tradução,
-a lista fica vazia e nada é anunciado.
+`<link rel="alternate" hreflang>`, e o seletor de idioma no cabeçalho usa a mesma lista. Quando um artigo ainda não
+tem versão em inglês, a lista fica vazia e nada é anunciado.
 
 ## URLs montadas num lugar só
 
@@ -125,4 +126,5 @@ As rotas em inglês ainda não existem. Quando o primeiro artigo em inglês entr
 2. Criar `src/pages/en/` espelhando as páginas atuais.
 3. Incluir as entradas em inglês no `getStaticPaths` do artigo, que hoje lê só o idioma padrão.
 
-{/* TODO(autor): você vai escrever os posts em inglês ou traduzir? Se já souber, vale uma frase aqui. */}
+As versões em inglês não vão ser traduções. Vou escrever cada uma direto em inglês. O `translationKey` liga
+dois artigos irmãos, não um texto e sua cópia.

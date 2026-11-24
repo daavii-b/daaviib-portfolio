@@ -40,8 +40,8 @@ Create `src/content/posts/<lang>/<slug>.mdx`. `<slug>` is kebab-case ASCII **in 
 ```yaml
 ---
 lang: pt
-translationKey: building-prumo # English, stable, shared by all translations
-slug: construindo-o-prumo
+translationKey: building-prumo # English, stable, shared by every locale version
+slug: construindo-o-prumo # per locale; translated or equal across locales is still undecided
 title: Construindo o Prumo # max 100 chars
 description: Uma frase, até 160 caracteres. Vai para o card, a busca, o RSS, a imagem de compartilhamento e a newsletter.
 publishedAt: 2026-12-01
@@ -94,4 +94,5 @@ Then do a **deletion pass**: remove every sentence the post still works without.
 Deliver the draft with: the one-sentence point, the open `TODO(autor)` questions, and what you cut or doubted.
 Keep `draft: true`. Commit as `feat(content): add draft "<title>"` (or `docs(content): …` for edits) on a branch.
 
-For the English version use the `translate-content` skill; the same anti-slop rules apply to the translation.
+English posts are written by the author in English. To scaffold or review one, use the `translate-content` skill; the
+same anti-slop rules apply.
