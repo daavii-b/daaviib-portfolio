@@ -23,7 +23,8 @@ before planning any change — it is the source of truth for principles and qual
 
 ## Architecture map
 
-- `src/content.config.ts` — Zod schemas for `posts`, `projects`, `experiences`.
+- `src/content.config.ts` — Zod schemas for `posts`, `projects`, `experiences` (`kind` work|study, optional `summary`),
+  `now` (Home panel and `/now`) and `about` (About-page content per locale).
   Entry ids are paths (`pt/prumo`); URL slugs come from the `slug` field.
 - `src/content/{posts,projects}/{pt,en}/` — content, one folder per locale.
 - `src/i18n/` — `config.ts` (locales), `ui.ts` (all UI strings), `utils.ts` (`t`, `localizePath`, `formatDate`).
@@ -42,11 +43,14 @@ before planning any change — it is the source of truth for principles and qual
   type `text-display-xl|lg`, `text-heading-lg|md|sm`, `text-eyebrow`, `text-meta` (dates/reading time only);
   widths `max-w-measure` (680, reading), `max-w-content` (1080, grids), `max-w-wide` (1280, header/footer).
   Never write raw hex/rgb in components. One accent (cobalt) per screen; borders, not shadows.
-- Reuse components before writing markup: `ui/Button`, `ui/Tag`, `ui/PostCover`, `PostCard`, `ProjectCard`, `PostList`,
-  `ContactCTA`, `icons/Icon`. Any element with `data-contact-open` (a `mailto:` link) opens the contact dialog.
+- Reuse components before writing markup: `ui/Button` (`solid` on patterned surfaces), `ui/Tag`, `ui/PostCover`, `PostCard`,
+  `ProjectCard`, `PostList`, `ContactCTA`, `SectionHeader`, `DefinitionList`, `ExperienceList`, `ClosingBox`,
+  `AvailabilityLine`, `CopyEmailButton`, `icons/Icon`. Browser-only helpers live in `src/scripts/` (e.g. `clipboard.ts`). Any element with `data-contact-open` (a `mailto:` link) opens the contact dialog.
 - Contact data and availability: `src/config/site.ts`. Pages pass `contact={{ kind, title? }}` and `section` to `BaseLayout`.
 - shadcn/ui is deferred; token names already have shadcn aliases (`--background`, `--primary`…) for a later `shadcn init`.
 - Every new page gets an entry in `tests/e2e/site.spec.ts` (renders + axe).
+- Optional files render only when present: CV at `public/cv/davi-brito-cv.pdf`, portrait at `src/assets/about/davi.jpg`.
+- Content links to site paths go through `resolveInternalLink` so drafts never become 404 links.
 - Repository docs and code are in English; site content is in Portuguese first.
 
 ## Astro knowledge

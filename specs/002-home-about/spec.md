@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-23
 
-**Status**: Draft
+**Status**: Approved
 
 **Input**: User description: "Implement complete Home and About pages, following the approved screens and the design system, with experiences, a 'Now' panel and a new project entry as typed content."
 
@@ -164,4 +164,5 @@ were last updated.
 - The item "Escrevendo: A série "Construindo este site"" has no link, since no series page exists yet.
 - The cover keyword for "Este site" is "Site", as in the approved screen.
 - The CV file lives at `public/cv/davi-brito-cv.pdf` and the portrait at `src/assets/about/davi.jpg`; neither exists yet.
+- In the education list the languages row is labelled "Idiomas" (the approved screen shows "—" with "· Idiomas" after the text) so the term is meaningful to screen readers.
 - The project page for "Este site" has no body text yet (none was provided); it shows the summary, cover and contact call to action.
