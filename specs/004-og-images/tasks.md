@@ -53,7 +53,7 @@ US1 share preview · US2 long titles · US3 titles and descriptions
 - [x] T013 E2E `tests/e2e/seo.spec.ts`: for `/`, `/blog`, `/projects`, `/about`, `/now`, `/blog/por-que-escolhi-astro`, `/projects/este-site`, 404: og:image absolute, same origin as canonical, 200, `image/png`, IHDR 1200×630, width/height/alt/twitter tags; title pattern; description ≤ 160; 404 uses the Home image; JSON-LD `image`
 - [x] T014 Docs: `CLAUDE.md` (OG images, title pattern, new deps), `docs/architecture.md` (decision row), `.claude/skills/add-page/SKILL.md` (register OG entry)
 - [x] T015 Quality gate: format, lint, check, coverage, build (check PNG sizes in `dist/og`), e2e, lhci
-- [ ] T016 Mark tasks, re-check spec/plan against the build, open the PR from `004-og-images` with the LinkedIn Post Inspector note
+- [x] T016 Mark tasks, re-check spec/plan against the build, open the PR from `004-og-images` with the LinkedIn Post Inspector note
 
 ## Found during implementation
 
