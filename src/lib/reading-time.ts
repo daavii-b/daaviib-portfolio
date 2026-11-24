@@ -1,4 +1,4 @@
-import type { MdastPluginEntry } from 'satteri';
+import type { MdastPluginDefinition } from 'satteri';
 
 const WORDS_PER_MINUTE = 200;
 
@@ -18,7 +18,7 @@ export function minutesForWords(words: number): number {
  * Only prose `text` nodes count: code blocks, inline code, HTML and MDX expressions are skipped.
  * It is a factory so the word count is local to each compiled document.
  */
-export const readingTimePlugin: MdastPluginEntry = () => {
+export const readingTimePlugin = (): MdastPluginDefinition => {
   let words = 0;
   return {
     name: 'reading-time',
