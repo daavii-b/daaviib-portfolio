@@ -30,6 +30,9 @@ before planning any change — it is the source of truth for principles and qual
 - `src/i18n/` — `config.ts` (locales), `ui.ts` (all UI strings), `utils.ts` (`t`, `localizePath`, `formatDate`).
 - `src/lib/content.ts` — pure, unit-tested helpers. `src/lib/collections.ts` — queries via `astro:content`.
 - `src/pages/` — default-locale (`pt`) routes. English routes will live in `src/pages/en/`.
+- `src/lib/og.ts` + `og-image.ts` + `font-metrics.ts` — share images (Open Graph): one 1200×630 PNG per page, rendered at
+  build by `src/pages/og/[...path].png.ts` (Satori + resvg, static WOFF fonts from `@fontsource/*`). `buildOgPages` is
+  the single list of pages with images; `BaseLayout` declares the image found by canonical path (404 → Home image).
 - `docs/architecture.md` — summary of the System Design.
 
 ## Conventions
@@ -48,7 +51,10 @@ before planning any change — it is the source of truth for principles and qual
   `AvailabilityLine`, `CopyEmailButton`, `TableOfContents`, `SeriesList`, `ShareLinks`, `CodeBlocks`, `mdx/Note`, `icons/Icon`. Browser-only helpers live in `src/scripts/` (e.g. `clipboard.ts`). Any element with `data-contact-open` (a `mailto:` link) opens the contact dialog.
 - Contact data and availability: `src/config/site.ts`. Pages pass `contact={{ kind, title? }}` and `section` to `BaseLayout`.
 - shadcn/ui is deferred; token names already have shadcn aliases (`--background`, `--primary`…) for a later `shadcn init`.
-- Every new page gets an entry in `tests/e2e/site.spec.ts` (renders + axe).
+- Every new page gets an entry in `tests/e2e/site.spec.ts` (renders + axe) and `tests/e2e/seo.spec.ts` (title + image);
+  static pages also get an entry in `STATIC_PAGES` (`src/lib/og.ts`) so they get their own share image.
+- Titles: `BaseLayout` renders "{title} · Davi Brito" (Home: no `title` → "Davi Brito · Fullstack Engineer"). Every page
+  passes a specific `description` ≤ 160 characters (UI keys tested; post `description`/project `summary` capped by Zod).
 - Optional files render only when present: CV at `public/cv/davi-brito-cv.pdf`, portrait at `src/assets/about/davi.jpg`.
 - Content links to site paths go through `resolveInternalLink` so drafts never become 404 links.
 - Articles: code fences accept `title="file.ts"` (framed by `src/lib/code-frame.ts`, a Shiki transformer); `<Note>` is
