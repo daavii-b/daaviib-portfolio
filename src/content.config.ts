@@ -28,6 +28,8 @@ const posts = defineCollection({
       series: z.string().optional(),
       project: reference('projects').optional(),
       cover: image().optional(),
+      /** Short word shown big on the typographic cover (defaults to the first tag). */
+      keyword: z.string().max(14).optional(),
       draft: z.boolean().default(false),
       /** Newsletter list slugs this post is sent to (post-v1). */
       newsletter: z.array(z.string()).optional(),
@@ -50,6 +52,8 @@ const projects = defineCollection({
         })
         .default({}),
       cover: image().optional(),
+      /** Short word shown big on the typographic cover (defaults to the name). */
+      keyword: z.string().max(14).optional(),
       featured: z.boolean().default(false),
       order: z.number().int().default(0),
       draft: z.boolean().default(false),

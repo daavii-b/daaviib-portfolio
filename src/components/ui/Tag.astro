@@ -1,0 +1,28 @@
+---
+/** Pill label. topic: clickable post tags · series: the post's series (max one per item) · neutral: stack/status. */
+interface Props {
+  variant?: 'topic' | 'series' | 'neutral';
+  href?: string | undefined;
+}
+
+const { variant = 'topic', href } = Astro.props;
+const variants = {
+  topic: 'bg-accent-subtle text-accent hover:text-accent-hover',
+  series: 'bg-accent-2-subtle text-accent-2',
+  neutral: 'bg-surface text-text-muted',
+};
+const classes = [
+  'inline-flex items-center rounded-full px-2.5 py-0.5 text-[13px] leading-snug font-medium',
+  variants[variant],
+];
+---
+
+{href ? (
+  <a href={href} class:list={classes}>
+    <slot />
+  </a>
+) : (
+  <span class:list={classes}>
+    <slot />
+  </span>
+)}

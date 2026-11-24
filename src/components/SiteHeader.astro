@@ -1,0 +1,95 @@
+---
+import { SITE } from '@/config/site';
+import { ENABLED_LOCALES, type Locale } from '@/i18n/config';
+import { localizePath, t } from '@/i18n/utils';
+
+import Icon from './icons/Icon.astro';
+import type { Alternate } from './SEO.astro';
+import ThemeToggle from './ThemeToggle.astro';
+
+interface Props {
+  lang: Locale;
+  alternates: Alternate[];
+  /** Section name shown after the author's name ("Davi Brito — Blog"). Omit on the home page. */
+  section?: string | undefined;
+}
+
+const { lang, alternates, section } = Astro.props;
+const current = Astro.url.pathname;
+const home = localizePath('/', lang);
+
+const links = [
+  { href: home, label: t(lang, 'nav.home') },
+  { href: localizePath('/projects', lang), label: t(lang, 'nav.projects') },
+  { href: localizePath('/blog', lang), label: t(lang, 'nav.blog') },
+  { href: localizePath('/about', lang), label: t(lang, 'nav.about') },
+  { href: localizePath('/now', lang), label: t(lang, 'nav.now') },
+];
+const isActive = (href: string) => (href === home ? current === href : current.startsWith(href));
+const showSwitcher = ENABLED_LOCALES.length > 1;
+const otherLocales = alternates.filter((alt) => alt.lang !== lang);
+const mailto = `mailto:${SITE.contact.email}`;
+---
+
+<header class="border-b border-border">
+  <div class="mx-auto flex h-16 max-w-wide items-center gap-8 px-5 md:px-10">
+    <a href={home} class="flex flex-col gap-1" aria-current={current === home ? 'page' : undefined}>
+      <span class="font-display text-[17px] leading-tight font-semibold tracking-[-0.01em] text-text">
+        {SITE.author}
+        {section && <span class="font-medium text-text-muted"> — {section}</span>}
+      </span>
+      <span class="text-[13px] leading-tight font-medium text-text-muted">{SITE.role}</span>
+    </a>
+
+    <nav aria-label="Main" class="ml-auto hidden md:block">
+      <ul class="flex gap-7 text-[15px]">
+        {links.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              aria-current={isActive(link.href) ? 'page' : undefined}
+              class="text-text-muted transition-colors duration-[120ms] hover:text-text aria-[current=page]:font-semibold aria-[current=page]:text-text"
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="ml-auto flex items-center gap-2 md:ml-0">
+      {showSwitcher &&
+        otherLocales.map((alt) => (
+          <a href={alt.path} hreflang={alt.lang} class="text-sm text-text-muted uppercase hover:text-text">
+            {alt.lang}
+          </a>
+        ))}
+      <a
+        href={mailto}
+        data-contact-open
+        aria-haspopup="dialog"
+        class="inline-flex min-h-11 items-center gap-2 rounded-md px-3 text-sm font-medium text-text-muted transition-colors duration-[120ms] hover:bg-surface hover:text-text md:border md:border-border-strong md:px-4 md:text-text"
+      >
+        <Icon name="message" size={18} />
+        <span class="sr-only md:not-sr-only">{t(lang, 'nav.contact')}</span>
+      </a>
+      <ThemeToggle label={t(lang, 'theme.toggle')} />
+    </div>
+  </div>
+
+  <nav aria-label="Main mobile" class="scrollbar-hide scroll-fade overflow-x-auto md:hidden">
+    <ul class="flex gap-6 px-5 text-[15px]">
+      {links.map((link) => (
+        <li class="flex-none">
+          <a
+            href={link.href}
+            aria-current={isActive(link.href) ? 'page' : undefined}
+            class="inline-block py-3 text-text-muted aria-[current=page]:font-semibold aria-[current=page]:text-text aria-[current=page]:shadow-[inset_0_-2px_0_var(--color-accent)]"
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+</header>

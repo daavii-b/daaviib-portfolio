@@ -1,3 +1,5 @@
+import { getRelativeLocaleUrl } from 'astro:i18n';
+
 import { DEFAULT_LOCALE, HTML_LANG, isLocale, type Locale } from './config';
 import { ui, type UiKey } from './ui';
 
@@ -9,21 +11,22 @@ export function t(lang: Locale, key: UiKey, params: Record<string, string | numb
   );
 }
 
-/** Locale of a URL path: `/en/blog` → `en`, `/blog` → `pt`. */
-export function getLocaleFromPath(pathname: string): Locale {
-  const [, first] = pathname.split('/');
-  return isLocale(first) ? first : DEFAULT_LOCALE;
+/**
+ * Narrow `Astro.currentLocale` (a plain string, computed by Astro from the URL) to a `Locale`,
+ * falling back to the default locale.
+ */
+export function toLocale(value: string | undefined): Locale {
+  return isLocale(value) ? value : DEFAULT_LOCALE;
 }
 
 /**
- * Build a URL path for a locale. Route segments are always English;
- * only the default locale has no prefix.
+ * Build a URL path for a locale with Astro's `getRelativeLocaleUrl`, so it follows the
+ * `i18n`, `trailingSlash` and `build.format` settings in `astro.config.mjs`.
+ * Route segments are always English; only the default locale has no prefix.
  * `localizePath('/blog/x', 'en')` → `/en/blog/x`, `localizePath('/', 'pt')` → `/`.
  */
 export function localizePath(path: string, lang: Locale): string {
-  const clean = `/${path.replace(/^\/+|\/+$/g, '')}`;
-  if (lang === DEFAULT_LOCALE) return clean;
-  return clean === '/' ? `/${lang}` : `/${lang}${clean}`;
+  return getRelativeLocaleUrl(lang, path);
 }
 
 export function formatDate(date: Date, lang: Locale): string {

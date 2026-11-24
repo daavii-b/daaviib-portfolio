@@ -1,40 +1,79 @@
 ---
+import Icon from '@/components/icons/Icon.astro';
 import PostList from '@/components/PostList.astro';
 import ProjectCard from '@/components/ProjectCard.astro';
-import BaseLayout from '@/layouts/BaseLayout.astro';
+import Button from '@/components/ui/Button.astro';
+import { SITE } from '@/config/site';
 import { DEFAULT_LOCALE } from '@/i18n/config';
-import { t } from '@/i18n/utils';
+import { localizePath, t } from '@/i18n/utils';
+import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getPosts, getProjects } from '@/lib/collections';
 
 const lang = DEFAULT_LOCALE;
-const posts = (await getPosts(lang)).slice(0, 5);
+const posts = (await getPosts(lang)).slice(0, 3);
 const featured = (await getProjects(lang)).filter((p) => p.data.featured);
 ---
 
-<BaseLayout>
-  <section class="mb-12">
-    <!-- TODO: replace with your real introduction. -->
-    <h1 class="text-3xl font-bold tracking-tight">Olá! 👋</h1>
-    <p class="mt-4 text-lg text-ink-muted">{t(lang, 'site.description')}</p>
-  </section>
-
-  {featured.length > 0 && (
-    <section class="mb-12" aria-labelledby="featured-heading">
-      <h2 id="featured-heading" class="mb-4 text-xl font-semibold">
-        {t(lang, 'home.featuredProjects')}
-      </h2>
-      <div class="grid gap-4 sm:grid-cols-2">
-        {featured.map((project) => (
-          <ProjectCard project={project} lang={lang} />
-        ))}
+<BaseLayout contact={{ kind: 'home' }}>
+  <div class="mx-auto max-w-content px-5 md:px-10">
+    <section aria-labelledby="hero" class="flex max-w-[720px] flex-col gap-6 pt-12 md:pt-28">
+      {SITE.availability.open && (
+        <p class="flex items-center gap-2 text-sm font-medium text-text-muted">
+          <span aria-hidden="true" class="size-2 rounded-full bg-success" />
+          {SITE.availability.label[lang]}
+        </p>
+      )}
+      <h1 id="hero" class="text-display-xl">
+        {t(lang, 'home.title')}
+      </h1>
+      <p class="text-lg text-text-muted md:text-xl">{t(lang, 'home.intro')}</p>
+      <div class="flex flex-col gap-3 sm:flex-row">
+        <Button href={localizePath('/projects', lang)} variant="primary" size="lg">
+          {t(lang, 'home.seeProjects')}
+        </Button>
+        <Button href={`mailto:${SITE.contact.email}`} size="lg" data-contact-open aria-haspopup="dialog">
+          <Icon name="message" size={18} />
+          {t(lang, 'contact.title')}
+        </Button>
       </div>
     </section>
-  )}
 
-  <section aria-labelledby="posts-heading">
-    <h2 id="posts-heading" class="mb-4 text-xl font-semibold">
-      {t(lang, 'home.latestPosts')}
-    </h2>
-    <PostList posts={posts} lang={lang} />
-  </section>
+    {featured.length > 0 && (
+      <section aria-labelledby="featured" class="mt-16 md:mt-32">
+        <div class="flex items-baseline justify-between gap-4">
+          <h2 id="featured" class="text-heading-lg">
+            {t(lang, 'home.featuredProjects')}
+          </h2>
+          <a
+            href={localizePath('/projects', lang)}
+            class="py-3 text-[15px] font-semibold text-accent hover:text-accent-hover"
+          >
+            {t(lang, 'home.allProjects')} →
+          </a>
+        </div>
+        <div class="mt-8 grid gap-10 sm:grid-cols-2 sm:gap-8">
+          {featured.map((project) => (
+            <ProjectCard project={project} lang={lang} />
+          ))}
+        </div>
+      </section>
+    )}
+
+    <section aria-labelledby="latest" class="mt-16 pb-16 md:mt-24 md:pb-24">
+      <div class="flex items-baseline justify-between gap-4">
+        <h2 id="latest" class="text-heading-lg">
+          {t(lang, 'home.latestPosts')}
+        </h2>
+        <a
+          href={localizePath('/blog', lang)}
+          class="py-3 text-[15px] font-semibold text-accent hover:text-accent-hover"
+        >
+          {t(lang, 'home.seeBlog')} →
+        </a>
+      </div>
+      <div class="mt-6">
+        <PostList posts={posts} lang={lang} />
+      </div>
+    </section>
+  </div>
 </BaseLayout>

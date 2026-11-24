@@ -1,24 +1,38 @@
 ---
 import '@/styles/global.css';
 
+import ContactDialog from '@/components/ContactDialog.astro';
 import Footer from '@/components/Footer.astro';
-import Header from '@/components/Header.astro';
 import SEO, { type Alternate } from '@/components/SEO.astro';
+import SiteHeader from '@/components/SiteHeader.astro';
 import ThemeScript from '@/components/ThemeScript.astro';
 import { HTML_LANG } from '@/i18n/config';
-import { getLocaleFromPath, t } from '@/i18n/utils';
+import { t, toLocale } from '@/i18n/utils';
+import type { ContactContext } from '@/lib/contact';
 
 interface Props {
   title?: string;
   description?: string;
+  /** Section shown in the header after the author's name ("Davi Brito — Blog"). */
+  section?: string;
+  /** What the pre-filled contact message refers to. */
+  contact?: ContactContext;
   /** Paths of this page in other locales (for hreflang and the language switcher). */
   alternates?: Alternate[];
   type?: 'website' | 'article';
   publishedAt?: Date;
 }
 
-const { title, description, alternates = [], type = 'website', publishedAt } = Astro.props;
-const lang = getLocaleFromPath(Astro.url.pathname);
+const {
+  title,
+  description,
+  section,
+  contact = { kind: 'other' },
+  alternates = [],
+  type = 'website',
+  publishedAt,
+} = Astro.props;
+const lang = toLocale(Astro.currentLocale);
 const siteTitle = t(lang, 'site.title');
 const pageTitle = title ? `${title} · ${siteTitle}` : siteTitle;
 ---
@@ -43,14 +57,15 @@ const pageTitle = title ? `${title} · ${siteTitle}` : siteTitle;
   <body class="flex min-h-dvh flex-col">
     <a
       href="#main"
-      class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:rounded focus:bg-surface focus:p-2"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-md focus:bg-bg focus:p-2"
     >
       {t(lang, 'nav.skip')}
     </a>
-    <Header lang={lang} alternates={alternates} />
-    <main id="main" class="mx-auto w-full max-w-3xl flex-1 px-4 py-10">
+    <SiteHeader lang={lang} alternates={alternates} section={section} />
+    <main id="main" class="flex-1">
       <slot />
     </main>
     <Footer lang={lang} />
+    <ContactDialog lang={lang} context={contact} />
   </body>
 </html>

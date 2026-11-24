@@ -9,24 +9,26 @@ interface Props {
 
 const { lang } = Astro.props;
 const year = new Date().getFullYear();
+const links = [
+  { href: SITE.social.github, label: 'GitHub', rel: 'me' },
+  { href: SITE.social.linkedin, label: 'LinkedIn', rel: 'me' },
+  { href: localizePath('/rss.xml', lang), label: t(lang, 'footer.rss') },
+];
 ---
 
 <footer class="border-t border-border">
-  <div class="mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-4 px-4 py-6 text-sm text-ink-muted">
+  <div class="mx-auto flex max-w-wide flex-wrap items-center justify-between gap-4 px-5 py-8 text-sm text-text-muted md:px-10">
     <p>
       © {year} {SITE.author}
     </p>
-    <ul class="flex gap-4">
-      <li>
-        <a href={SITE.social.github} class="hover:text-ink" rel="me">
-          GitHub
-        </a>
-      </li>
-      <li>
-        <a href={localizePath('/rss.xml', lang)} class="hover:text-ink">
-          {t(lang, 'footer.rss')}
-        </a>
-      </li>
+    <ul class="flex gap-6">
+      {links.map((link) => (
+        <li>
+          <a href={link.href} rel={link.rel} class="transition-colors duration-[120ms] hover:text-text">
+            {link.label}
+          </a>
+        </li>
+      ))}
     </ul>
   </div>
 </footer>

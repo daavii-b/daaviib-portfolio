@@ -1,11 +1,11 @@
 ---
-import type { CollectionEntry } from 'astro:content';
-
 import type { Locale } from '@/i18n/config';
-import { formatDate, localizePath, t } from '@/i18n/utils';
+import { localizePath, t } from '@/i18n/utils';
+import type { Post } from '@/lib/collections';
 
+/** Compact list of posts (date · title · description), used on the home page. */
 interface Props {
-  posts: CollectionEntry<'posts'>[];
+  posts: Post[];
   lang: Locale;
 }
 
@@ -13,22 +13,26 @@ const { posts, lang } = Astro.props;
 ---
 
 {posts.length === 0 ? (
-  <p class="text-ink-muted">{t(lang, 'blog.empty')}</p>
+  <p class="text-text-muted">{t(lang, 'blog.empty')}</p>
 ) : (
-  <ul class="space-y-6">
+  <ul class="border-b border-border">
     {posts.map((post) => (
-      <li>
-        <article>
-          <h3 class="text-lg font-semibold">
-            <a href={localizePath(`/blog/${post.data.slug}`, lang)} class="hover:text-accent">
-              {post.data.title}
-            </a>
-          </h3>
-          <time datetime={post.data.publishedAt.toISOString()} class="text-sm text-ink-muted">
-            {formatDate(post.data.publishedAt, lang)}
-          </time>
-          <p class="mt-1 text-ink-muted">{post.data.description}</p>
-        </article>
+      <li class="group relative grid gap-2 border-t border-border py-5 sm:grid-cols-[140px_minmax(0,1fr)_auto] sm:items-baseline sm:gap-6">
+        <time datetime={post.data.publishedAt.toISOString()} class="text-meta text-text-muted">
+          {post.data.publishedAt.toISOString().slice(0, 10)}
+        </time>
+        <div class="flex flex-col gap-1.5">
+          <a
+            href={localizePath(`/blog/${post.data.slug}`, lang)}
+            class="text-heading-sm text-text transition-colors duration-200 group-hover:text-accent after:absolute after:inset-0 after:content-['']"
+          >
+            {post.data.title}
+          </a>
+          <span class="text-[15px] text-text-muted">{post.data.description}</span>
+        </div>
+        <span class="text-meta hidden text-text-muted sm:block">
+          {t(lang, 'blog.readingTime', { minutes: post.minutesRead })}
+        </span>
       </li>
     ))}
   </ul>

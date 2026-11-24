@@ -1,11 +1,13 @@
 ---
-import { render } from 'astro:content';
 import type { GetStaticPaths } from 'astro';
+import { render } from 'astro:content';
 
+import ContactCTA from '@/components/ContactCTA.astro';
 import PostList from '@/components/PostList.astro';
-import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostCover from '@/components/ui/PostCover.astro';
 import { DEFAULT_LOCALE } from '@/i18n/config';
 import { t } from '@/i18n/utils';
+import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getPosts, getProjects } from '@/lib/collections';
 
 export const getStaticPaths = (async () => {
@@ -19,20 +21,39 @@ const { Content } = await render(project);
 const related = (await getPosts(lang)).filter((post) => post.data.project?.id === project.id);
 ---
 
-<BaseLayout title={project.data.name} description={project.data.summary}>
-  <article>
-    <h1 class="text-3xl font-bold tracking-tight">{project.data.name}</h1>
-    <p class="mt-2 text-ink-muted">{project.data.summary}</p>
-    <div class="prose mt-8 max-w-none dark:prose-invert">
-      <Content />
+<BaseLayout
+  title={project.data.name}
+  description={project.data.summary}
+  section={t(lang, 'nav.projects')}
+  contact={{ kind: 'project', title: project.data.name }}
+>
+  <article class="mx-auto max-w-content px-5 pb-24 md:px-10">
+    <header class="max-w-measure pt-12 md:pt-24">
+      <h1 class="text-display-lg">{project.data.name}</h1>
+      <p class="mt-4 text-lg text-text-muted md:text-xl">{project.data.summary}</p>
+    </header>
+    <div class="mt-10">
+      <PostCover
+        keyword={project.data.keyword ?? project.data.name}
+        label={t(lang, `projects.status.${project.data.status}`)}
+        size="wide"
+      />
+    </div>
+    <div class="mt-12 max-w-measure">
+      <div class="prose max-w-none md:prose-lg">
+        <Content />
+      </div>
+      {related.length > 0 && (
+        <section aria-labelledby="related" class="mt-12">
+          <h2 id="related" class="text-heading-md mb-4">
+            {t(lang, 'projects.relatedPosts')}
+          </h2>
+          <PostList posts={related} lang={lang} />
+        </section>
+      )}
+      <div class="mt-12">
+        <ContactCTA lang={lang} kind="project" name={project.data.name} />
+      </div>
     </div>
   </article>
-  {related.length > 0 && (
-    <section class="mt-12" aria-labelledby="related-heading">
-      <h2 id="related-heading" class="mb-4 text-xl font-semibold">
-        {t(lang, 'projects.relatedPosts')}
-      </h2>
-      <PostList posts={related} lang={lang} />
-    </section>
-  )}
 </BaseLayout>

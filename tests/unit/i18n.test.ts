@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { LOCALES } from '@/i18n/config';
 import { ui } from '@/i18n/ui';
-import { formatDate, getLocaleFromPath, localizePath, t } from '@/i18n/utils';
+import { formatDate, localizePath, t, toLocale } from '@/i18n/utils';
 
 describe('t', () => {
   it('returns the string for the locale', () => {
@@ -25,15 +25,14 @@ describe('ui dictionaries', () => {
   });
 });
 
-describe('getLocaleFromPath', () => {
+describe('toLocale', () => {
   it.each([
-    ['/', 'pt'],
-    ['/blog/ola-mundo', 'pt'],
-    ['/en', 'en'],
-    ['/en/blog/hello-world', 'en'],
-    ['/entrevista', 'pt'],
-  ])('%s → %s', (path, expected) => {
-    expect(getLocaleFromPath(path)).toBe(expected);
+    ['pt', 'pt'],
+    ['en', 'en'],
+    [undefined, 'pt'],
+    ['fr', 'pt'],
+  ] as const)('%s → %s', (value, expected) => {
+    expect(toLocale(value)).toBe(expected);
   });
 });
 
@@ -43,6 +42,7 @@ describe('localizePath', () => {
     ['/', 'en', '/en'],
     ['/blog/x', 'pt', '/blog/x'],
     ['blog/x/', 'en', '/en/blog/x'],
+    ['/rss.xml', 'pt', '/rss.xml'],
   ] as const)('%s (%s) → %s', (path, lang, expected) => {
     expect(localizePath(path, lang)).toBe(expected);
   });

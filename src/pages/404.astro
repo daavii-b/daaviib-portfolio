@@ -7,10 +7,15 @@ const lang = DEFAULT_LOCALE;
 ---
 
 <BaseLayout title={t(lang, 'notFound.title')}>
-  <h1 class="text-3xl font-bold tracking-tight">{t(lang, 'notFound.title')}</h1>
-  <p class="mt-4">
-    <a href={localizePath('/', lang)} class="text-accent underline">
-      {t(lang, 'notFound.back')}
-    </a>
-  </p>
+  <div class="mx-auto max-w-measure px-5 pt-12 pb-24 md:px-10 md:pt-24">
+    <h1 class="text-display-lg">{t(lang, 'notFound.title')}</h1>
+    <p class="mt-4">
+      <a
+        href={localizePath('/', lang)}
+        class="text-accent underline underline-offset-4 hover:text-accent-hover"
+      >
+        {t(lang, 'notFound.back')}
+      </a>
+    </p>
+  </div>
 </BaseLayout>

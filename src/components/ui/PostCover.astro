@@ -1,0 +1,47 @@
+---
+/**
+ * Typographic cover: topic label, the post's keyword set large and one cobalt mark over a dot grid.
+ * Used instead of stock photos for posts and projects without an image.
+ */
+interface Props {
+  keyword: string;
+  label: string;
+  size?: 'card' | 'feature' | 'wide';
+}
+
+const { keyword, label, size = 'card' } = Astro.props;
+const aspect = { card: 'aspect-[16/10]', feature: 'aspect-[16/10]', wide: 'aspect-[16/10] md:aspect-[21/8]' }[
+  size
+];
+const word = {
+  card: 'text-[44px]',
+  feature: 'text-[56px] md:text-[88px]',
+  wide: 'text-[64px] md:text-[120px]',
+}[size];
+const pad = size === 'card' ? 'p-5' : 'p-5 md:p-7';
+---
+
+<div
+  aria-hidden="true"
+  class:list={[
+    'bg-dots relative overflow-hidden rounded-lg border border-border bg-surface transition-[transform,border-color] duration-200 ease-out group-hover:-translate-y-0.5 group-hover:border-border-strong',
+    aspect,
+  ]}
+>
+  <span class:list={['absolute top-0 left-0', pad]}>
+    <span class="text-eyebrow bg-surface px-1.5 py-1 text-text-muted">{label}</span>
+  </span>
+  <span class:list={['absolute top-0 right-0', pad]}>
+    <span class="block size-2.5 rounded-[2px] bg-accent"></span>
+  </span>
+  <span class:list={['absolute bottom-0 left-0', pad, 'pb-3']}>
+    <span
+      class:list={[
+        'bg-surface px-1.5 font-display leading-none font-bold tracking-[-0.03em] text-text',
+        word,
+      ]}
+    >
+      {keyword}
+    </span>
+  </span>
+</div>

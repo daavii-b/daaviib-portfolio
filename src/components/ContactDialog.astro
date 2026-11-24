@@ -1,0 +1,251 @@
+---
+import { SITE } from '@/config/site';
+import type { Locale } from '@/i18n/config';
+import { t } from '@/i18n/utils';
+import { contactMessage, contactSubject, mailtoUrl, whatsappUrl, type ContactContext } from '@/lib/contact';
+
+import Icon, { type IconName } from './icons/Icon.astro';
+
+/**
+ * Contact panel on the native <dialog>. Opened by any element with [data-contact-open]
+ * (those are mailto: links, so the site still works without JavaScript).
+ * Desktop: panel under the header, right-aligned. Mobile: bottom sheet.
+ */
+interface Props {
+  lang: Locale;
+  context: ContactContext;
+}
+
+const { lang, context } = Astro.props;
+const { email, whatsapp } = SITE.contact;
+const schedulingUrl: string = SITE.contact.schedulingUrl;
+const message = contactMessage(context, lang);
+const subject = contactSubject(context, lang);
+interface ContactOption {
+  id: string;
+  icon: IconName;
+  label: string;
+  hint: string;
+  href: string;
+}
+
+const options: ContactOption[] = [
+  {
+    id: 'whatsapp',
+    icon: 'chat',
+    label: 'WhatsApp',
+    hint: t(lang, 'contact.whatsappHint'),
+    href: whatsappUrl(whatsapp, message),
+  },
+  {
+    id: 'email',
+    icon: 'mail',
+    label: t(lang, 'contact.email'),
+    hint: t(lang, 'contact.emailHint'),
+    href: mailtoUrl(email, subject, message),
+  },
+];
+if (schedulingUrl) {
+  options.push({
+    id: 'schedule',
+    icon: 'calendar',
+    label: t(lang, 'contact.schedule'),
+    hint: t(lang, 'contact.scheduleHint'),
+    href: schedulingUrl,
+  });
+}
+---
+
+<dialog
+  id="contact-dialog"
+  aria-labelledby="contact-title"
+  data-email={email}
+  data-whatsapp={whatsapp}
+  data-subject={subject}
+  class="contact-dialog m-0 w-full max-w-none border border-border bg-bg p-0 text-text shadow-overlay sm:w-[400px] sm:rounded-lg"
+>
+  <div class="flex flex-col gap-4 p-5 pb-7 sm:pb-5">
+    <span aria-hidden="true" class="mx-auto h-1 w-9 rounded-full bg-border-strong sm:hidden"></span>
+    <div class="flex items-center justify-between">
+      <h2 id="contact-title" class="text-heading-sm">
+        {t(lang, 'contact.title')}
+      </h2>
+      <form method="dialog">
+        <button
+          type="submit"
+          aria-label={t(lang, 'contact.close')}
+          class="-mr-2 inline-grid size-11 place-items-center rounded-full text-text-muted hover:bg-surface hover:text-text"
+        >
+          <Icon name="x" />
+        </button>
+      </form>
+    </div>
+
+    {SITE.availability.open && (
+      <p class="-mt-2 flex items-center gap-2 text-[13px] font-medium text-text-muted">
+        <span aria-hidden="true" class="size-2 rounded-full bg-success" />
+        {SITE.availability.label[lang]}
+      </p>
+    )}
+
+    <div class="flex flex-col gap-2">
+      <label for="contact-message" class="text-[13px] font-medium">
+        {t(lang, 'contact.messageLabel')}{' '}
+        <span class="font-normal text-text-muted">· {t(lang, 'contact.messageHint')}</span>
+      </label>
+      <textarea
+        id="contact-message"
+        rows="3"
+        class="w-full resize-y rounded-md border border-border-strong bg-bg px-3.5 py-3 text-[15px] leading-normal"
+      >{message}</textarea>
+    </div>
+
+    <ul class="flex flex-col gap-2">
+      {options.map((option) => (
+        <li>
+          <a
+            href={option.href}
+            data-contact-link={option.id}
+            target="_blank"
+            rel="noopener"
+            class="flex min-h-14 items-center gap-3 rounded-md border border-border-strong px-3.5 transition-colors duration-[120ms] hover:bg-surface"
+          >
+            <span class="inline-grid size-8 place-items-center rounded-md bg-surface text-text">
+              <Icon name={option.icon} size={18} />
+            </span>
+            <span class="flex flex-1 flex-col gap-0.5">
+              <span class="text-[15px] leading-tight font-semibold">{option.label}</span>
+              <span class="text-[13px] leading-snug text-text-muted">{option.hint}</span>
+            </span>
+            <Icon name="external" size={16} class="text-text-muted" />
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <div class="flex items-center justify-between gap-3 border-t border-border pt-3.5">
+      <span id="contact-email" class="text-meta text-text-muted">
+        {email}
+      </span>
+      <button
+        type="button"
+        data-contact-copy
+        class="inline-flex min-h-9 items-center gap-1.5 rounded-sm px-2.5 text-[13px] font-medium text-text-muted hover:bg-surface hover:text-text data-[copied]:text-success"
+      >
+        <Icon name="copy" size={16} class="in-data-[copied]:hidden" />
+        <Icon name="check" size={16} class="hidden in-data-[copied]:block" />
+        <span data-label>{t(lang, 'contact.copy')}</span>
+      </button>
+    </div>
+  </div>
+
+  <p
+    role="status"
+    data-contact-toast
+    data-copy-label={t(lang, 'contact.copy')}
+    data-copied-label={t(lang, 'contact.copied')}
+    data-toast-label={t(lang, 'contact.copiedToast')}
+    class="pointer-events-none fixed bottom-8 left-1/2 flex -translate-x-1/2 translate-y-2 items-center gap-2.5 rounded-md bg-text px-4 py-3 text-sm font-medium text-bg opacity-0 shadow-overlay transition-[opacity,transform] duration-200 data-[visible]:translate-y-0 data-[visible]:opacity-100"
+  >
+    <Icon name="check" size={18} />
+    <span data-toast-text></span>
+  </p>
+</dialog>
+
+<style>
+  .contact-dialog[open] {
+    /* Mobile: bottom sheet */
+    inset: auto 0 0 0;
+    max-height: 90dvh;
+    border-radius: 16px 16px 0 0;
+    border-bottom: 0;
+    animation: sheet-in 200ms var(--ease-out);
+  }
+
+  @media (min-width: 640px) {
+    .contact-dialog[open] {
+      /* Desktop: panel under the header, aligned with the content's right edge */
+      inset: 72px max(20px, calc((100vw - 1280px) / 2 + 40px)) auto auto;
+      border-radius: var(--radius-lg);
+      border-bottom: 1px solid var(--color-border);
+      animation: panel-in 200ms var(--ease-out);
+    }
+  }
+
+  @keyframes sheet-in {
+    from {
+      transform: translateY(16px);
+      opacity: 0;
+    }
+  }
+
+  @keyframes panel-in {
+    from {
+      transform: translateY(-4px) scale(0.98);
+      opacity: 0;
+    }
+  }
+</style>
+
+<script>
+  import { mailtoUrl, whatsappUrl } from '@/lib/contact';
+
+  const dialog = document.querySelector<HTMLDialogElement>('#contact-dialog');
+
+  if (dialog) {
+    const { email = '', whatsapp = '', subject = '' } = dialog.dataset;
+    const textarea = dialog.querySelector<HTMLTextAreaElement>('#contact-message');
+    const whatsappLink = dialog.querySelector<HTMLAnchorElement>('[data-contact-link="whatsapp"]');
+    const emailLink = dialog.querySelector<HTMLAnchorElement>('[data-contact-link="email"]');
+    const copyButton = dialog.querySelector<HTMLButtonElement>('[data-contact-copy]');
+    const copyLabel = copyButton?.querySelector<HTMLElement>('[data-label]');
+    const toast = dialog.querySelector<HTMLElement>('[data-contact-toast]');
+    let toastTimer: number | undefined;
+
+    for (const trigger of document.querySelectorAll<HTMLElement>('[data-contact-open]')) {
+      trigger.addEventListener('click', (event) => {
+        event.preventDefault();
+        dialog.showModal();
+        if (textarea) {
+          textarea.focus();
+          textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+        }
+      });
+    }
+
+    // Click on the backdrop (the dialog box itself, outside the inner content) closes it.
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog) dialog.close();
+    });
+
+    textarea?.addEventListener('input', () => {
+      const message = textarea.value;
+      if (whatsappLink) whatsappLink.href = whatsappUrl(whatsapp, message);
+      if (emailLink) emailLink.href = mailtoUrl(email, subject, message);
+    });
+
+    copyButton?.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(email);
+      } catch {
+        // Clipboard unavailable: select the address so the visitor can copy it.
+        const node = dialog.querySelector('#contact-email');
+        if (node) window.getSelection()?.selectAllChildren(node);
+      }
+      copyButton.dataset.copied = '';
+      if (copyLabel && toast) copyLabel.textContent = toast.dataset.copiedLabel ?? '';
+      const toastText = toast?.querySelector<HTMLElement>('[data-toast-text]');
+      if (toast && toastText) {
+        toastText.textContent = toast.dataset.toastLabel ?? '';
+        toast.dataset.visible = '';
+      }
+      window.clearTimeout(toastTimer);
+      toastTimer = window.setTimeout(() => {
+        if (toast) delete toast.dataset.visible;
+        if (toastText) toastText.textContent = '';
+        delete copyButton.dataset.copied;
+        if (copyLabel && toast) copyLabel.textContent = toast.dataset.copyLabel ?? '';
+      }, 2000);
+    });
+  }
+</script>
