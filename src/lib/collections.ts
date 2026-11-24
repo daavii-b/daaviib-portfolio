@@ -18,6 +18,8 @@ async function withReadingTime(entry: CollectionEntry<'posts'>): Promise<Post> {
   return { ...entry, minutesRead: Number.isFinite(minutesRead) ? minutesRead : 1 };
 }
 
+// Renders every post on each call (for the reading time). Fine for a few posts; see "Known technical debt" in
+// docs/architecture.md for when and how to cache it.
 export async function getPosts(lang: Locale): Promise<Post[]> {
   const all = await getCollection('posts', (entry) => isPublished(entry, lang, new Date(), SHOW_DRAFTS));
   const posts = await Promise.all(all.map(withReadingTime));
