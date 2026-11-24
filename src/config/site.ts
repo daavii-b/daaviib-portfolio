@@ -2,6 +2,8 @@
 export const SITE = {
   author: 'Davi Brito',
   role: 'Fullstack Engineer',
+  /** Brand mark printed on share images (the canonical host is the configured site URL). */
+  domain: 'daaviib.site',
   contact: {
     email: 'brit.davi122@gmail.com',
     /** WhatsApp number in E.164 digits only (no "+", spaces or dashes). */

@@ -5,8 +5,9 @@ import type { Locale } from './config';
  * `pt` is the source of truth; `en` must have exactly the same keys (enforced by the type below).
  */
 const pt = {
-  'site.title': 'Portfolio & Blog',
-  'site.description': 'Projetos, experiências e artigos sobre programação.',
+  'site.title': 'Davi Brito · Fullstack Engineer',
+  'site.description':
+    'Davi Brito, Fullstack Engineer: projetos, experiência e artigos sobre construir software de ponta a ponta.',
   'nav.home': 'Início',
   'nav.about': 'Sobre',
   'nav.projects': 'Projetos',
@@ -17,13 +18,16 @@ const pt = {
   'home.latestPosts': 'Últimos artigos',
   'home.featuredProjects': 'Projetos em destaque',
   'blog.title': 'Blog',
-  'blog.description': 'Artigos sobre programação, projetos e carreira.',
+  'blog.description':
+    'Artigos de Davi Brito sobre o que está construindo: arquitetura, front-end, TypeScript e os bastidores dos projetos.',
   'blog.empty': 'Nenhum artigo publicado ainda.',
   'blog.readingTime': '{minutes} min de leitura',
   'blog.publishedOn': 'Publicado em',
   'blog.updatedOn': 'Atualizado em',
   'projects.title': 'Projetos',
   'projects.description': 'Coisas que construí e estou construindo.',
+  'projects.metaDescription':
+    'Projetos de Davi Brito, Fullstack Engineer: o que construí e estou construindo, com contexto, stack e aprendizados.',
   'projects.empty': 'Nenhum projeto publicado ainda.',
   'projects.status.active': 'Ativo',
   'projects.status.paused': 'Pausado',
@@ -35,11 +39,15 @@ const pt = {
   'now.title': 'Agora',
   'notFound.title': 'Página não encontrada',
   'notFound.back': 'Voltar para o início',
+  'notFound.description':
+    'Esta página não existe ou mudou de endereço. Volte para o início do site de Davi Brito.',
   'footer.rss': 'RSS',
   'nav.contact': 'Contato',
   'home.title': 'Construo software de ponta a ponta e escrevo sobre o caminho.',
   'home.intro':
     'Sou Davi Brito, Fullstack Engineer. Desenvolvo produtos da ideia à produção: features, arquitetura e escolha de tecnologias. Há mais de 3 anos construo plataformas SaaS B2B com TypeScript, NestJS e Next.js.',
+  'home.description':
+    'Davi Brito, Fullstack Engineer. Levo produtos da ideia à produção e construo plataformas SaaS B2B com TypeScript, NestJS e Next.js.',
   'home.seeProjects': 'Ver projetos',
   'home.allProjects': 'Todos os projetos',
   'home.seeBlog': 'Ver o blog',
@@ -77,6 +85,11 @@ const pt = {
   'about.closingTitle': 'Vamos trabalhar juntos?',
   'about.closingText': 'Estou aberto a projetos PJ e freelas. A mensagem já vem escrita.',
   'now.updatedOn': 'Atualizado em',
+  'now.description':
+    'O que Davi Brito está fazendo agora: trabalho, estudos e projetos em andamento, atualizado com frequência.',
+  'about.description':
+    'Quem é Davi Brito: Fullstack Engineer que constrói plataformas SaaS B2B. Trajetória, experiência, ferramentas e formação.',
+  'og.project': 'Projeto',
   'article.toc': 'Neste artigo',
   'article.nav': 'Navegação do artigo',
   'article.series': 'Série',
@@ -94,8 +107,9 @@ const pt = {
 export type UiKey = keyof typeof pt;
 
 const en: Record<UiKey, string> = {
-  'site.title': 'Portfolio & Blog',
-  'site.description': 'Projects, experience and articles about programming.',
+  'site.title': 'Davi Brito · Fullstack Engineer',
+  'site.description':
+    'Davi Brito, Fullstack Engineer: projects, experience and articles about building software end to end.',
   'nav.home': 'Home',
   'nav.about': 'About',
   'nav.projects': 'Projects',
@@ -106,13 +120,16 @@ const en: Record<UiKey, string> = {
   'home.latestPosts': 'Latest articles',
   'home.featuredProjects': 'Featured projects',
   'blog.title': 'Blog',
-  'blog.description': 'Articles about programming, projects and career.',
+  'blog.description':
+    'Articles by Davi Brito on what I am building: architecture, front-end, TypeScript and the making of my projects.',
   'blog.empty': 'No articles published yet.',
   'blog.readingTime': '{minutes} min read',
   'blog.publishedOn': 'Published on',
   'blog.updatedOn': 'Updated on',
   'projects.title': 'Projects',
   'projects.description': "Things I've built and I'm building.",
+  'projects.metaDescription':
+    'Projects by Davi Brito, Fullstack Engineer: what I have built and am building, with context, stack and lessons learned.',
   'projects.empty': 'No projects published yet.',
   'projects.status.active': 'Active',
   'projects.status.paused': 'Paused',
@@ -124,11 +141,14 @@ const en: Record<UiKey, string> = {
   'now.title': 'Now',
   'notFound.title': 'Page not found',
   'notFound.back': 'Back to home',
+  'notFound.description': 'This page does not exist or has moved. Go back to the start of Davi Brito’s site.',
   'footer.rss': 'RSS',
   'nav.contact': 'Contact',
   'home.title': 'I build software end to end and write about the journey.',
   'home.intro':
     'I’m Davi Brito, a Fullstack Engineer. I take products from idea to production: features, architecture and technology choices. For 3+ years I’ve been building B2B SaaS platforms with TypeScript, NestJS and Next.js.',
+  'home.description':
+    'Davi Brito, Fullstack Engineer. I take products from idea to production and build B2B SaaS platforms with TypeScript, NestJS and Next.js.',
   'home.seeProjects': 'See projects',
   'home.allProjects': 'All projects',
   'home.seeBlog': 'Read the blog',
@@ -168,6 +188,10 @@ const en: Record<UiKey, string> = {
   'about.closingTitle': 'Shall we work together?',
   'about.closingText': 'I’m open to contract and freelance work. The message comes already written.',
   'now.updatedOn': 'Updated on',
+  'now.description': 'What Davi Brito is doing now: work, studies and projects in progress, updated often.',
+  'about.description':
+    'Who Davi Brito is: a Fullstack Engineer building B2B SaaS platforms. Background, experience, tools and education.',
+  'og.project': 'Project',
   'article.toc': 'On this page',
   'article.nav': 'Article navigation',
   'article.series': 'Series',

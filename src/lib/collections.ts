@@ -1,11 +1,13 @@
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 
+import { SITE } from '@/config/site';
 import type { Locale } from '@/i18n/config';
-import { localizePath } from '@/i18n/utils';
+import { localizePath, t } from '@/i18n/utils';
 
 import { byPublishedDesc, isPublished } from './content';
 import { sortExperiences } from './experience';
 import { normalizePath } from './links';
+import { buildOgPages, type OgPage } from './og';
 
 const SHOW_DRAFTS = import.meta.env.DEV;
 
@@ -69,4 +71,23 @@ export async function getPublishedPaths(lang: Locale): Promise<Set<string>> {
     ...projects.map((project) => `/projects/${project.data.slug}`),
   ];
   return new Set(paths.map((path) => normalizePath(localizePath(path, lang))));
+}
+
+/**
+ * Pages of a locale that get a share image (see `buildOgPages`). Read by the `/og/[...path].png` endpoint, which
+ * renders them, and by `BaseLayout`, which declares them, so a page never points to an image that was not built.
+ * Uses `getCollection` directly: no `render()`, so it stays cheap.
+ */
+export async function getOgPages(lang: Locale): Promise<OgPage[]> {
+  const [posts, projects] = await Promise.all([
+    getCollection('posts', (entry) => isPublished(entry, lang, new Date(), SHOW_DRAFTS)),
+    getProjects(lang),
+  ]);
+  return buildOgPages({
+    author: SITE.author,
+    text: (key) => t(lang, key),
+    localize: (path) => localizePath(path, lang),
+    posts: posts.sort(byPublishedDesc).map((post) => post.data),
+    projects: projects.map((project) => ({ slug: project.data.slug, name: project.data.name })),
+  });
 }
