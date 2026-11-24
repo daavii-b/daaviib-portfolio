@@ -1,0 +1,52 @@
+---
+lang: pt
+translationKey: why-astro
+slug: por-que-escolhi-astro
+title: Por que escolhi Astro para este site
+description: Este site tem um trabalho simples, ser rápido de ler, fácil de publicar e barato de manter. O Astro resolveu os três sem eu abrir mão de nada.
+publishedAt: 2026-11-24
+tags: [astro, arquitetura]
+series: Construindo este site
+keyword: Astro
+draft: false
+---
+
+## O que eu precisava
+
+Antes de escolher a ferramenta, escrevi o que o site precisava fazer. A lista era curta:
+
+- Páginas que carregam rápido em qualquer conexão.
+- Publicar um artigo com um `git push`, sem CMS para manter.
+- Português agora, inglês depois, sem refazer rotas.
+- Nota alta no Lighthouse sem otimizar no braço.
+
+## Estático primeiro
+
+Quase nada aqui muda entre uma visita e outra. Gerar o HTML no build e servir pela CDN tira servidor, banco e cold start do caminho de leitura.
+
+O Astro faz isso por padrão e só manda JavaScript para o navegador quando um componente realmente precisa, como o botão de tema. O resto da página chega pronto.
+
+## Conteúdo como dado tipado
+
+Cada artigo é um arquivo MDX com o frontmatter validado por um schema [Zod](https://zod.dev). Se faltar a descrição ou a data vier errada, o build falha antes de o erro chegar ao ar.
+
+```ts title="src/content.config.ts"
+const posts = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/posts', generateId }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string().min(1).max(100),
+      description: z.string().min(1).max(200),
+      publishedAt: z.coerce.date(),
+      tags: z.array(z.string()).default([]),
+      cover: image().optional(),
+      draft: z.boolean().default(false),
+    }),
+});
+```
+
+<Note>Rascunhos com `draft: true` aparecem no `pnpm dev`, mas nunca no build de produção.</Note>
+
+## O que ficou para depois
+
+A newsletter precisa de servidor e banco, então ficou fora da primeira versão. Quando entrar, vai morar em poucas funções serverless, longe do caminho de leitura.
