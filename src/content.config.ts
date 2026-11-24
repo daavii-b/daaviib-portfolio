@@ -60,19 +60,62 @@ const projects = defineCollection({
     }),
 });
 
-const localizedText = z.object({ pt: z.string(), en: z.string().optional() });
+const localizedText = z.object({ pt: z.string().min(1), en: z.string().min(1).optional() });
 
 const experiences = defineCollection({
   loader: glob({ pattern: '**/*.json', base: './src/content/experiences', generateId }),
   schema: z.object({
     company: z.string().min(1),
     role: localizedText,
+    /** `work` shows on the Home page with month precision; `study` only on About, in years. */
+    kind: z.enum(['work', 'study']).default('work'),
     start: z.coerce.date(),
     end: z.coerce.date().optional(),
     location: z.string().optional(),
+    /** One line shown on the Home page. */
+    summary: localizedText.optional(),
     highlights: z.array(localizedText).default([]),
     stack: z.array(z.string()).default([]),
   }),
 });
 
-export const collections = { posts, projects, experiences };
+/** What I'm focused on right now (Home panel and /now). One file per locale: `now/pt.json`. */
+const now = defineCollection({
+  loader: glob({ pattern: '**/*.json', base: './src/content/now', generateId }),
+  schema: z.object({
+    lang: z.enum(LOCALES),
+    updatedAt: z.coerce.date(),
+    items: z
+      .array(
+        z.object({
+          label: z.string().min(1),
+          text: z.string().min(1),
+          /** A site path (`/projects/prumo`) or an https URL. Unpublished site paths render as text. */
+          href: z
+            .string()
+            .regex(/^(\/|https:\/\/)/, 'href must be a site path or an https URL')
+            .optional(),
+        }),
+      )
+      .min(1),
+  }),
+});
+
+/** About-page content per locale: `about/pt.json`. Headings and buttons live in `src/i18n/ui.ts`. */
+const about = defineCollection({
+  loader: glob({ pattern: '**/*.json', base: './src/content/about', generateId }),
+  schema: z.object({
+    lang: z.enum(LOCALES),
+    lead: z.string().min(1),
+    story: z.array(z.string().min(1)).min(1),
+    tools: z.array(z.object({ label: z.string().min(1), items: z.array(z.string().min(1)).min(1) })).min(1),
+    education: z
+      .array(
+        z.object({ period: z.string().min(1), title: z.string().min(1), institution: z.string().min(1) }),
+      )
+      .default([]),
+    languages: z.string().min(1).optional(),
+  }),
+});
+
+export const collections = { posts, projects, experiences, now, about };

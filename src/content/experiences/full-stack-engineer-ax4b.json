@@ -1,0 +1,29 @@
+{
+  "company": "AX4B",
+  "role": { "pt": "Full Stack Software Engineer" },
+  "kind": "work",
+  "start": "2023-08",
+  "summary": {
+    "pt": "Liderei a arquitetura de uma plataforma de assinatura digital que substituiu a ferramenta paga usada pela empresa e reduzi a latência da API em 70–90% com filas (BullMQ e Redis)."
+  },
+  "highlights": [
+    {
+      "pt": "Participei desde a concepção de uma plataforma B2B de assinatura digital e gestão de contratos: stack, abordagens e features, com NestJS, Next.js, Clean Architecture e DDD."
+    },
+    {
+      "pt": "A plataforma substituiu a ferramenta de assinatura paga usada internamente por uma empresa de 150 a 200 funcionários."
+    },
+    {
+      "pt": "Reduzi a latência da API em 70–90% levando o processamento pesado (envio de emails, fluxo de assinatura) para filas com BullMQ e Redis, com retries e backoff."
+    },
+    {
+      "pt": "Montei a infraestrutura local em Docker (PostgreSQL, Redis, MinIO no lugar do S3, Mailpit para emails), evitando custos de AWS em desenvolvimento."
+    },
+    {
+      "pt": "Levei o tempo de release de dias para minutos com GitHub Actions e Semantic Release, e espalhei Conventional Commits e git-flow pelo time."
+    },
+    {
+      "pt": "Transações em operações críticas, rate limiting, observabilidade com Better Stack, deploys e correções de bugs críticos."
+    }
+  ]
+}

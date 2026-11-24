@@ -1,0 +1,12 @@
+{
+  "company": "Autodidata",
+  "role": { "pt": "Projetos de estudo" },
+  "kind": "study",
+  "start": "2020-01",
+  "end": "2023-01",
+  "highlights": [
+    {
+      "pt": "Aplicações completas com Python, Django, Django REST, React, TypeScript, Node.js e HTML/CSS, estudando os padrões de mercado na prática."
+    }
+  ]
+}
