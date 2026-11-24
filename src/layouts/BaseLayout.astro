@@ -8,7 +8,11 @@ import SiteHeader from '@/components/SiteHeader.astro';
 import ThemeScript from '@/components/ThemeScript.astro';
 import { HTML_LANG } from '@/i18n/config';
 import { t, toLocale } from '@/i18n/utils';
+import { SITE } from '@/config/site';
+import { getOgPages } from '@/lib/collections';
 import type { ContactContext } from '@/lib/contact';
+import { canonicalPath } from '@/lib/links';
+import { findOgPage, pageTitle as formatPageTitle } from '@/lib/og';
 
 interface Props {
   title?: string;
@@ -34,7 +38,10 @@ const {
 } = Astro.props;
 const lang = toLocale(Astro.currentLocale);
 const siteTitle = t(lang, 'site.title');
-const pageTitle = title ? `${title} · ${siteTitle}` : siteTitle;
+const pageTitle = formatPageTitle(title, siteTitle, SITE.author);
+// Pages without their own share image (the 404 page) get the Home image.
+const ogPage = findOgPage(await getOgPages(lang), canonicalPath(Astro.url.pathname));
+const ogImage = { url: new URL(ogPage.imagePath, Astro.site).href, alt: ogPage.title };
 ---
 
 <!doctype html>
@@ -52,6 +59,7 @@ const pageTitle = title ? `${title} · ${siteTitle}` : siteTitle;
       alternates={alternates}
       type={type}
       publishedAt={publishedAt}
+      image={ogImage}
     />
   </head>
   <body class="flex min-h-dvh flex-col">

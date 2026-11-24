@@ -15,7 +15,12 @@ const items = (now?.data.items ?? []).map((item) => ({
 }));
 ---
 
-<BaseLayout title={t(lang, 'now.title')} section={t(lang, 'nav.now')} contact={{ kind: 'other' }}>
+<BaseLayout
+  title={t(lang, 'now.title')}
+  description={t(lang, 'now.description')}
+  section={t(lang, 'nav.now')}
+  contact={{ kind: 'other' }}
+>
   <div class="mx-auto max-w-measure px-5 pt-12 pb-24 md:px-10 md:pt-24">
     <h1 class="text-display-lg">{t(lang, 'now.title')}</h1>
     {now && (

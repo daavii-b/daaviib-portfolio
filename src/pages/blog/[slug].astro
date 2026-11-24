@@ -19,6 +19,7 @@ import { localizePath, t } from '@/i18n/utils';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getPosts } from '@/lib/collections';
 import { findTranslation } from '@/lib/content';
+import { ogImagePath } from '@/lib/og';
 import { relatedPosts } from '@/lib/related';
 import { seriesPosition } from '@/lib/series';
 import { blogPostingJsonLd, serializeJsonLd } from '@/lib/structured-data';
@@ -53,6 +54,7 @@ const jsonLd = blogPostingJsonLd({
   tags: post.data.tags,
   lang,
   author: { name: SITE.author, url: new URL(localizePath('/', lang), Astro.site).href },
+  image: new URL(ogImagePath(path), Astro.site).href,
 });
 
 const alternates = (['en'] as const)

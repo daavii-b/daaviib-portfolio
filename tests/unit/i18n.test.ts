@@ -25,6 +25,16 @@ describe('ui dictionaries', () => {
   });
 });
 
+describe('meta descriptions', () => {
+  it('are at most 160 characters in every locale', () => {
+    for (const lang of LOCALES) {
+      for (const [key, value] of Object.entries(ui[lang])) {
+        if (/[dD]escription$/.test(key)) expect(value.length, `${lang} ${key}`).toBeLessThanOrEqual(160);
+      }
+    }
+  });
+});
+
 describe('toLocale', () => {
   it.each([
     ['pt', 'pt'],
