@@ -28,6 +28,13 @@ Reader ──POST /api/newsletter/subscribe──▶ Serverless API ──▶ Po
 | Newsletter | Own implementation, post-v1, multiple lists (per project/topic), double opt-in, email = summary + link           | Maintenance outweighs value → managed service                   |
 | Hosting    | Vercel                                                                                                           | Build > 5 min or cost                                           |
 
+## Design system
+
+Defined in the **daaviib — Design System** artifact and implemented in `src/styles/global.css` (spec `specs/001-design-system`).
+Palette "Grafite e Cobalto" (graphite neutrals, cobalt as the only interaction color, purple for details), Space Grotesk +
+Inter + JetBrains Mono (self-hosted via Fontsource), light/dark themes. Interactive pieces use native HTML (`<dialog>`) and
+small scripts — the contact dialog ships < 1 KB gzipped; no UI framework runtime.
+
 ## Roadmap
 
 1. **Foundation** — Astro + Tailwind, i18n structure, base pages, CI, deploy. _(this commit)_

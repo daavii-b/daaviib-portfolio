@@ -36,6 +36,33 @@ const pt = {
   'notFound.title': 'Página não encontrada',
   'notFound.back': 'Voltar para o início',
   'footer.rss': 'RSS',
+  'nav.contact': 'Contato',
+  'home.title': 'Construo software de ponta a ponta e escrevo sobre o caminho.',
+  'home.intro':
+    'Sou Davi Brito, Fullstack Engineer. Desenvolvo produtos da ideia à produção: features, arquitetura e escolha de tecnologias. Há mais de 3 anos construo plataformas SaaS B2B com TypeScript, NestJS e Next.js.',
+  'home.seeProjects': 'Ver projetos',
+  'home.allProjects': 'Todos os projetos',
+  'home.seeBlog': 'Ver o blog',
+  'blog.lead': 'Notas sobre o que estou construindo: arquitetura, front-end e os bastidores do Prumo.',
+  'blog.back': 'Todos os artigos',
+  'contact.title': 'Fale comigo',
+  'contact.openLabel': 'Entrar em contato',
+  'contact.close': 'Fechar',
+  'contact.messageLabel': 'Mensagem',
+  'contact.messageHint': 'já vem escrita, ajuste se quiser',
+  'contact.whatsappHint': 'Abre a conversa com a mensagem',
+  'contact.email': 'Email',
+  'contact.emailHint': 'Abre seu email com assunto e texto',
+  'contact.schedule': 'Agendar uma conversa',
+  'contact.scheduleHint': 'Escolha um horário na agenda',
+  'contact.copy': 'Copiar email',
+  'contact.copied': 'Copiado',
+  'contact.copiedToast': 'Email copiado',
+  'cta.articleTitle': 'Gostou do artigo?',
+  'cta.articleText':
+    'Se quiser trocar uma ideia sobre o que escrevi aqui, me chama. A mensagem já vai com o nome deste artigo.',
+  'cta.projectTitle': 'Quer saber mais sobre {name}?',
+  'cta.projectText': 'Conto os detalhes que não couberam aqui. A mensagem já vai com o nome do projeto.',
 } as const;
 
 export type UiKey = keyof typeof pt;
@@ -72,6 +99,34 @@ const en: Record<UiKey, string> = {
   'notFound.title': 'Page not found',
   'notFound.back': 'Back to home',
   'footer.rss': 'RSS',
+  'nav.contact': 'Contact',
+  'home.title': 'I build software end to end and write about the journey.',
+  'home.intro':
+    'I’m Davi Brito, a Fullstack Engineer. I take products from idea to production: features, architecture and technology choices. For 3+ years I’ve been building B2B SaaS platforms with TypeScript, NestJS and Next.js.',
+  'home.seeProjects': 'See projects',
+  'home.allProjects': 'All projects',
+  'home.seeBlog': 'Read the blog',
+  'blog.lead': 'Notes on what I’m building: architecture, front-end and the making of Prumo.',
+  'blog.back': 'All articles',
+  'contact.title': 'Get in touch',
+  'contact.openLabel': 'Get in touch',
+  'contact.close': 'Close',
+  'contact.messageLabel': 'Message',
+  'contact.messageHint': 'already written, edit it if you like',
+  'contact.whatsappHint': 'Opens the chat with the message',
+  'contact.email': 'Email',
+  'contact.emailHint': 'Opens your email with subject and text',
+  'contact.schedule': 'Book a call',
+  'contact.scheduleHint': 'Pick a time in the calendar',
+  'contact.copy': 'Copy email',
+  'contact.copied': 'Copied',
+  'contact.copiedToast': 'Email copied',
+  'cta.articleTitle': 'Enjoyed the article?',
+  'cta.articleText':
+    'If you want to talk about what I wrote here, reach out. The message already includes this article’s title.',
+  'cta.projectTitle': 'Want to know more about {name}?',
+  'cta.projectText':
+    'I can share the details that did not fit here. The message already includes the project’s name.',
 };
 
 export const ui: Record<Locale, Record<UiKey, string>> = { pt, en };

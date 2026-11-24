@@ -6,8 +6,10 @@ import { t } from '@/i18n/utils';
 const lang = DEFAULT_LOCALE;
 ---
 
-<BaseLayout title={t(lang, 'now.title')}>
-  <h1 class="mb-6 text-3xl font-bold tracking-tight">{t(lang, 'now.title')}</h1>
-  <!-- TODO: what you are focused on right now (see nownownow.com). -->
-  <p class="text-ink-muted">Em breve.</p>
+<BaseLayout title={t(lang, 'now.title')} section={t(lang, 'nav.now')} contact={{ kind: 'other' }}>
+  <div class="mx-auto max-w-measure px-5 pt-12 pb-24 md:px-10 md:pt-24">
+    <h1 class="text-display-lg mb-6">{t(lang, 'now.title')}</h1>
+    <!-- TODO: what you are focused on right now (see nownownow.com). -->
+    <p class="text-text-muted">Em breve.</p>
+  </div>
 </BaseLayout>

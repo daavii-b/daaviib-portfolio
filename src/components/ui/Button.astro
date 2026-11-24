@@ -1,0 +1,35 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+/**
+ * Button or link with the design-system look.
+ * primary: one main action per screen · secondary: alternatives · ghost: low emphasis.
+ */
+type Props = (HTMLAttributes<'a'> & HTMLAttributes<'button'>) & {
+  variant?: 'primary' | 'secondary' | 'ghost';
+  size?: 'md' | 'lg';
+  href?: string;
+};
+
+const { variant = 'secondary', size = 'md', href, class: className, ...rest } = Astro.props;
+
+const base =
+  'inline-flex items-center justify-center gap-2 rounded-md font-medium whitespace-nowrap transition-colors duration-[120ms] ease-out active:translate-y-px disabled:pointer-events-none disabled:opacity-50';
+const sizes = { md: 'min-h-11 px-4 text-sm', lg: 'min-h-12 px-6 text-base' };
+const variants = {
+  primary: 'bg-accent text-on-accent hover:bg-accent-hover',
+  secondary: 'border border-border-strong bg-transparent text-text hover:bg-surface',
+  ghost: 'bg-transparent text-text-muted hover:bg-surface hover:text-text',
+};
+const classes = [base, sizes[size], variants[variant], className];
+---
+
+{href ? (
+  <a href={href} class:list={classes} {...rest}>
+    <slot />
+  </a>
+) : (
+  <button type="button" class:list={classes} {...rest}>
+    <slot />
+  </button>
+)}

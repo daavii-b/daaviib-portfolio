@@ -36,7 +36,16 @@ before planning any change — it is the source of truth for principles and qual
 - Route segments are English; slugs are translated (`/blog/construindo-o-prumo`, `/en/blog/building-prumo`).
 - Never hard-code UI text in components: add a key to `src/i18n/ui.ts` for **both** `pt` and `en`.
 - Import with the `@/` alias; type-only imports use `import type`.
-- Tailwind utilities with the theme tokens (`bg-surface`, `text-ink`, `text-ink-muted`, `border-border`, `text-accent`).
+- Design tokens live in `src/styles/global.css` (source: the **daaviib — Design System** artifact). Use only token utilities:
+  colors `bg-bg`, `bg-surface`, `bg-surface-raised`, `text-text`, `text-text-muted`, `border-border`, `border-border-strong`,
+  `text-accent`/`bg-accent`, `bg-accent-subtle`, `text-on-accent`, `text-accent-2` (detail only: series, code keywords);
+  type `text-display-xl|lg`, `text-heading-lg|md|sm`, `text-eyebrow`, `text-meta` (dates/reading time only);
+  widths `max-w-measure` (680, reading), `max-w-content` (1080, grids), `max-w-wide` (1280, header/footer).
+  Never write raw hex/rgb in components. One accent (cobalt) per screen; borders, not shadows.
+- Reuse components before writing markup: `ui/Button`, `ui/Tag`, `ui/PostCover`, `PostCard`, `ProjectCard`, `PostList`,
+  `ContactCTA`, `icons/Icon`. Any element with `data-contact-open` (a `mailto:` link) opens the contact dialog.
+- Contact data and availability: `src/config/site.ts`. Pages pass `contact={{ kind, title? }}` and `section` to `BaseLayout`.
+- shadcn/ui is deferred; token names already have shadcn aliases (`--background`, `--primary`…) for a later `shadcn init`.
 - Every new page gets an entry in `tests/e2e/site.spec.ts` (renders + axe).
 - Repository docs and code are in English; site content is in Portuguese first.
 

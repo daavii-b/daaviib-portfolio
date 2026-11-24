@@ -3,15 +3,19 @@ import { expect, test } from '@playwright/test';
 
 const pages = ['/', '/blog', '/projects', '/about', '/now'];
 
-for (const path of pages) {
-  test(`${path} renders in Portuguese with no a11y violations`, async ({ page }) => {
-    await page.goto(path);
-    await expect(page.locator('html')).toHaveAttribute('lang', 'pt-BR');
-    await expect(page.locator('h1')).toBeVisible();
+for (const colorScheme of ['light', 'dark'] as const) {
+  for (const path of pages) {
+    test(`${path} (${colorScheme}) renders in Portuguese with no a11y violations`, async ({ page }) => {
+      await page.emulateMedia({ colorScheme });
+      await page.goto(path);
+      await expect(page.locator('html')).toHaveAttribute('lang', 'pt-BR');
+      await expect(page.locator('html')).toHaveClass(colorScheme === 'dark' ? /dark/ : /^(?!.*dark).*$/);
+      await expect(page.locator('h1')).toBeVisible();
 
-    const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
-    expect(results.violations).toEqual([]);
-  });
+      const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
+      expect(results.violations).toEqual([]);
+    });
+  }
 }
 
 test('theme toggle switches and persists dark mode', async ({ page }) => {
@@ -21,6 +25,12 @@ test('theme toggle switches and persists dark mode', async ({ page }) => {
   await expect(page.locator('html')).toHaveClass(/dark/);
   await page.reload();
   await expect(page.locator('html')).toHaveClass(/dark/);
+});
+
+test('header shows the section next to the author name', async ({ page }) => {
+  await page.goto('/blog');
+  await expect(page.getByRole('banner')).toContainText('Davi Brito — Blog');
+  await expect(page.getByRole('banner')).toContainText('Fullstack Engineer');
 });
 
 test('unknown routes return the 404 page', async ({ page }) => {

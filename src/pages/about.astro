@@ -8,34 +8,36 @@ const lang = DEFAULT_LOCALE;
 const experiences = await getExperiences();
 ---
 
-<BaseLayout title={t(lang, 'about.title')}>
-  <h1 class="mb-6 text-3xl font-bold tracking-tight">{t(lang, 'about.title')}</h1>
-  <!-- TODO: write your bio. -->
-  <p class="text-ink-muted">Em breve.</p>
+<BaseLayout title={t(lang, 'about.title')} section={t(lang, 'nav.about')} contact={{ kind: 'about' }}>
+  <div class="mx-auto max-w-measure px-5 pt-12 pb-24 md:px-10 md:pt-24">
+    <h1 class="text-display-lg mb-6">{t(lang, 'about.title')}</h1>
+    <!-- TODO: write your bio. -->
+    <p class="text-text-muted">Em breve.</p>
 
-  {experiences.length > 0 && (
-    <section class="mt-12" aria-labelledby="experience-heading">
-      <h2 id="experience-heading" class="mb-6 text-xl font-semibold">
-        {t(lang, 'about.experience')}
-      </h2>
-      <ol class="space-y-8 border-l border-border pl-6">
-        {experiences.map(({ data }) => (
-          <li>
-            <h3 class="font-semibold">
-              {data.role[lang] ?? data.role.pt} · {data.company}
-            </h3>
-            <p class="text-sm text-ink-muted">
-              {formatDate(data.start, lang)} —{' '}
-              {data.end ? formatDate(data.end, lang) : t(lang, 'about.present')}
-            </p>
-            <ul class="mt-2 list-disc pl-5 text-ink-muted">
-              {data.highlights.map((h) => (
-                <li>{h[lang] ?? h.pt}</li>
-              ))}
-            </ul>
-          </li>
-        ))}
-      </ol>
-    </section>
-  )}
+    {experiences.length > 0 && (
+      <section class="mt-12" aria-labelledby="experience-heading">
+        <h2 id="experience-heading" class="text-heading-md mb-6">
+          {t(lang, 'about.experience')}
+        </h2>
+        <ol class="space-y-8 border-l border-border pl-6">
+          {experiences.map(({ data }) => (
+            <li>
+              <h3 class="font-semibold">
+                {data.role[lang] ?? data.role.pt} · {data.company}
+              </h3>
+              <p class="text-sm text-text-muted">
+                {formatDate(data.start, lang)} —{' '}
+                {data.end ? formatDate(data.end, lang) : t(lang, 'about.present')}
+              </p>
+              <ul class="mt-2 list-disc pl-5 text-text-muted">
+                {data.highlights.map((h) => (
+                  <li>{h[lang] ?? h.pt}</li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ol>
+      </section>
+    )}
+  </div>
 </BaseLayout>

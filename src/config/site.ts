@@ -1,9 +1,21 @@
-/** Site-wide settings. Update `author` and `social` with your real data. */
+/** Site-wide settings. Contact data and availability are read by the contact dialog. */
 export const SITE = {
-  author: 'daavii-b',
+  author: 'Davi Brito',
+  role: 'Fullstack Engineer',
+  contact: {
+    email: 'brit.davi122@gmail.com',
+    /** WhatsApp number in E.164 digits only (no "+", spaces or dashes). */
+    whatsapp: '5585984662837',
+    /** Scheduling link (e.g. Cal.com). Empty = the option is hidden. */
+    schedulingUrl: '',
+  },
+  availability: {
+    /** Shows the green "available" line in the hero and the contact dialog. */
+    open: true,
+    label: { pt: 'Aberto a projetos PJ e freelas', en: 'Open to contract and freelance work' },
+  },
   social: {
     github: 'https://github.com/daavii-b',
-    linkedin: '',
-    email: '',
+    linkedin: 'https://www.linkedin.com/in/daaviib',
   },
 } as const;

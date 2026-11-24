@@ -1,33 +1,200 @@
+/*
+ * daaviib design system — token layer.
+ * Source of truth: the "daaviib — Design System" artifact (palette "Grafite e Cobalto").
+ * Components use only these tokens (bg-bg, text-text, text-text-muted, border-border, text-accent…).
+ */
 @import 'tailwindcss';
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/space-grotesk';
+@import '@fontsource-variable/jetbrains-mono';
 @plugin '@tailwindcss/typography';
 
 /* Dark mode follows the `.dark` class set on <html> (see ThemeScript). */
 @custom-variant dark (&:where(.dark, .dark *));
 
-@theme {
-  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
+/* ---------- Color tokens: light (default) and dark ---------- */
+:root {
+  --ds-bg: #ffffff;
+  --ds-surface: #f4f4f5;
+  --ds-surface-raised: #fafafa;
+  --ds-border: #e4e4e7;
+  --ds-border-strong: #8a8a93;
+  --ds-text: #09090b;
+  --ds-text-muted: #52525b;
+  --ds-accent: #1d5fd6;
+  --ds-accent-hover: #174cab;
+  --ds-accent-subtle: #eaf1fd;
+  --ds-on-accent: #ffffff;
+  --ds-accent-2: #5e3bee;
+  --ds-accent-2-subtle: #f0ecff;
+  --ds-success: #15803d;
+  --ds-danger: #b91c1c;
+  --ds-shadow-overlay: 0 8px 24px rgb(9 9 11 / 0.12);
+  --ds-scrim: rgb(9 9 11 / 0.4);
+}
 
-  --color-surface: oklch(99% 0 0);
-  --color-surface-muted: oklch(96.5% 0.005 260);
-  --color-ink: oklch(22% 0.02 260);
-  --color-ink-muted: oklch(45% 0.02 260);
-  --color-accent: oklch(55% 0.18 255);
-  --color-border: oklch(90% 0.01 260);
+.dark {
+  --ds-bg: #0d0d0f;
+  --ds-surface: #17171a;
+  --ds-surface-raised: #1f1f23;
+  --ds-border: #2a2a2f;
+  --ds-border-strong: #6b6b75;
+  --ds-text: #ededef;
+  --ds-text-muted: #9a9aa3;
+  --ds-accent: #5b9dff;
+  --ds-accent-hover: #7db2ff;
+  --ds-accent-subtle: #15233b;
+  --ds-on-accent: #0d0d0f;
+  --ds-accent-2: #b19cff;
+  --ds-accent-2-subtle: #211a3a;
+  --ds-success: #4ade80;
+  --ds-danger: #f87171;
+  --ds-shadow-overlay: 0 8px 24px rgb(0 0 0 / 0.5);
+  --ds-scrim: rgb(0 0 0 / 0.6);
+}
+
+/*
+ * shadcn/ui-compatible aliases, so `shadcn init` can be added later without touching components.
+ */
+:root,
+.dark {
+  --background: var(--ds-bg);
+  --foreground: var(--ds-text);
+  --card: var(--ds-bg);
+  --card-foreground: var(--ds-text);
+  --popover: var(--ds-bg);
+  --popover-foreground: var(--ds-text);
+  --primary: var(--ds-accent);
+  --primary-foreground: var(--ds-on-accent);
+  --secondary: var(--ds-surface);
+  --secondary-foreground: var(--ds-text);
+  --muted: var(--ds-surface);
+  --muted-foreground: var(--ds-text-muted);
+  --accent: var(--ds-surface);
+  --accent-foreground: var(--ds-text);
+  --destructive: var(--ds-danger);
+  --input: var(--ds-border-strong);
+  --ring: var(--ds-accent);
+  --radius: 0.5rem;
+}
+
+@theme inline {
+  --color-bg: var(--ds-bg);
+  --color-surface: var(--ds-surface);
+  --color-surface-raised: var(--ds-surface-raised);
+  --color-border: var(--ds-border);
+  --color-border-strong: var(--ds-border-strong);
+  --color-text: var(--ds-text);
+  --color-text-muted: var(--ds-text-muted);
+  --color-accent: var(--ds-accent);
+  --color-accent-hover: var(--ds-accent-hover);
+  --color-accent-subtle: var(--ds-accent-subtle);
+  --color-on-accent: var(--ds-on-accent);
+  --color-accent-2: var(--ds-accent-2);
+  --color-accent-2-subtle: var(--ds-accent-2-subtle);
+  --color-success: var(--ds-success);
+  --color-danger: var(--ds-danger);
+
+  --shadow-overlay: var(--ds-shadow-overlay);
+}
+
+@theme {
+  /* Typography */
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Space Grotesk Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Radius: sm 4 (inline code) · md 8 (buttons, inputs) · lg 12 (cards) · full (pills) */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  /* Layout widths */
+  --container-measure: 680px;
+  --container-content: 1080px;
+  --container-wide: 1280px;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --default-transition-duration: 200ms;
+  --default-transition-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* ---------- Type scale (desktop; display sizes clamp on small screens) ---------- */
+@utility text-display-xl {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 1.6rem + 3vw, 3.5rem);
+  line-height: 1.05;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+@utility text-display-lg {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 1.6rem + 1.4vw, 2.625rem);
+  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+@utility text-heading-lg {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 1.3rem + 0.7vw, 1.875rem);
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+@utility text-heading-md {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  line-height: 1.25;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+@utility text-heading-sm {
+  font-family: var(--font-display);
+  font-size: 1.1875rem;
+  line-height: 1.3;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+@utility text-eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  line-height: 1.25;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+@utility text-meta {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+/* Horizontal scroll rows (filters, mobile nav): no visible scrollbar, edge fade. */
+@utility scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+@utility scroll-fade {
+  mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
+}
+
+/* Typographic cover pattern: 16px dot grid in the border color. */
+@utility bg-dots {
+  background-image: radial-gradient(circle, var(--ds-border) 1.2px, transparent 1.6px);
+  background-size: 16px 16px;
+  background-position: 8px 8px;
 }
 
 @layer base {
-  .dark {
-    --color-surface: oklch(17% 0.015 260);
-    --color-surface-muted: oklch(22% 0.015 260);
-    --color-ink: oklch(94% 0.01 260);
-    --color-ink-muted: oklch(72% 0.015 260);
-    --color-accent: oklch(72% 0.15 255);
-    --color-border: oklch(30% 0.015 260);
-  }
-
   html {
-    @apply bg-surface text-ink antialiased;
+    @apply bg-bg font-sans text-text antialiased;
     color-scheme: light;
   }
 
@@ -35,8 +202,12 @@
     color-scheme: dark;
   }
 
+  ::selection {
+    @apply bg-accent-subtle text-text;
+  }
+
   :focus-visible {
-    @apply outline-2 outline-offset-2 outline-accent;
+    @apply rounded-sm outline-2 outline-offset-2 outline-accent;
   }
 
   /* Dual-theme code blocks generated by Shiki */
@@ -45,6 +216,55 @@
     color: var(--shiki-dark) !important;
     background-color: var(--shiki-dark-bg) !important;
   }
+
+  .astro-code {
+    @apply rounded-md border border-border p-4 text-sm;
+  }
+
+  dialog::backdrop {
+    background: var(--ds-scrim);
+  }
+}
+
+/* Prose (articles) mapped to the tokens. */
+.prose {
+  --tw-prose-body: var(--ds-text);
+  --tw-prose-headings: var(--ds-text);
+  --tw-prose-links: var(--ds-accent);
+  --tw-prose-bold: var(--ds-text);
+  --tw-prose-bullets: var(--ds-text-muted);
+  --tw-prose-counters: var(--ds-text-muted);
+  --tw-prose-quotes: var(--ds-text);
+  --tw-prose-quote-borders: var(--ds-border);
+  --tw-prose-hr: var(--ds-border);
+  --tw-prose-captions: var(--ds-text-muted);
+  --tw-prose-code: var(--ds-text);
+  --tw-prose-th-borders: var(--ds-border);
+  --tw-prose-td-borders: var(--ds-border);
+}
+
+.prose :where(h2, h3, h4) {
+  font-family: var(--font-display);
+}
+
+.prose :where(a) {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  transition: color 200ms var(--ease-out);
+}
+
+.prose :where(a):hover {
+  color: var(--ds-accent-hover);
+  text-decoration-thickness: 2px;
+}
+
+.prose :where(:not(pre) > code) {
+  @apply rounded-sm border border-border bg-surface px-1.5 py-0.5 font-normal;
+}
+
+.prose :where(:not(pre) > code)::before,
+.prose :where(:not(pre) > code)::after {
+  content: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -53,5 +273,6 @@
   *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

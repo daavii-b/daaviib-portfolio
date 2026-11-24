@@ -1,0 +1,32 @@
+---
+import { SITE } from '@/config/site';
+import type { Locale } from '@/i18n/config';
+import { t } from '@/i18n/utils';
+
+import Icon from './icons/Icon.astro';
+import Button from './ui/Button.astro';
+
+/** End-of-article / end-of-project call to action. Opens the contact dialog with the page's context. */
+interface Props {
+  lang: Locale;
+  kind: 'article' | 'project';
+  name?: string;
+}
+
+const { lang, kind, name = '' } = Astro.props;
+const title = kind === 'article' ? t(lang, 'cta.articleTitle') : t(lang, 'cta.projectTitle', { name });
+const text = kind === 'article' ? t(lang, 'cta.articleText') : t(lang, 'cta.projectText');
+---
+
+<section aria-labelledby="contact-cta" class="flex flex-col gap-3 border-t border-border pt-10">
+  <h2 id="contact-cta" class="text-heading-md">
+    {title}
+  </h2>
+  <p class="text-[17px] text-text-muted">{text}</p>
+  <div class="mt-2">
+    <Button href={`mailto:${SITE.contact.email}`} data-contact-open aria-haspopup="dialog">
+      <Icon name="message" size={18} />
+      {t(lang, 'contact.title')}
+    </Button>
+  </div>
+</section>
