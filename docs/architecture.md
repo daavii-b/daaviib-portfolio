@@ -42,6 +42,14 @@ small scripts — the contact dialog ships < 1 KB gzipped; no UI framework runti
 3. **Newsletter** — lists, subscribe/confirm/unsubscribe, batched sending, deliverability.
 4. **Evolution** — English version, metrics dashboard, comments.
 
+## Known technical debt
+
+Deliberately postponed; revisit when the trigger happens.
+
+| Item                                                                                                                                                                                        | Why it was left                                                                                | Trigger                                               | Fix                                                                                                 |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ----------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `getPosts()` (`src/lib/collections.ts`) calls `render()` on every post each time it runs, to read the reading time. It runs on the Home, `/blog`, `/projects/[slug]` and the article pages. | With one post the cost is irrelevant; a cache adds complexity without need (noted 2026-11-24). | Dozens of posts, or a noticeably slower `pnpm build`. | Memoize the result in the module, computed once per locale (e.g. a `Map<Locale, Promise<Post[]>>`). |
+
 ## Open questions
 
 - Domain (needed before the newsletter; v1 can run on `*.vercel.app`).

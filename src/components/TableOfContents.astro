@@ -1,0 +1,95 @@
+---
+import type { Locale } from '@/i18n/config';
+import { t } from '@/i18n/utils';
+import type { TocEntry } from '@/lib/toc';
+
+import Icon from './icons/Icon.astro';
+
+/**
+ * "Neste artigo". `aside`: list for the sticky side column, with the current section highlighted while scrolling.
+ * `details`: collapsed disclosure for narrow screens. Links work without JavaScript.
+ */
+interface Props {
+  items: TocEntry[];
+  lang: Locale;
+  variant: 'aside' | 'details';
+}
+
+const { items, lang, variant } = Astro.props;
+const title = t(lang, 'article.toc');
+---
+
+{variant === 'aside' ? (
+  <nav aria-labelledby="toc-title">
+    <p id="toc-title" class="text-eyebrow mb-2.5 text-text-muted">
+      {title}
+    </p>
+    <ul>
+      {items.map((item) => (
+        <li>
+          <a
+            href={`#${item.id}`}
+            data-toc-link={item.id}
+            class="group/toc flex items-baseline gap-2.5 py-1.5 text-sm text-text-muted transition-colors hover:text-text aria-[current=true]:font-semibold aria-[current=true]:text-text"
+          >
+            <span
+              aria-hidden="true"
+              class="size-1.5 flex-none -translate-y-0.5 rounded-full bg-border group-aria-[current=true]/toc:bg-accent"
+            />
+            {item.text}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+) : (
+  <details class="group/details rounded-md border border-border bg-surface">
+    <summary class="flex min-h-12 cursor-pointer list-none items-center justify-between gap-3 px-4 text-[15px] font-semibold [&::-webkit-details-marker]:hidden">
+      {title}
+      <Icon
+        name="chevronDown"
+        size={18}
+        class="flex-none text-text-muted transition-transform group-open/details:rotate-180"
+      />
+    </summary>
+    <nav aria-label={title} class="px-4 pb-3">
+      <ul>
+        {items.map((item) => (
+          <li>
+            <a
+              href={`#${item.id}`}
+              class="flex items-baseline gap-2.5 py-1.5 text-sm text-text-muted hover:text-text"
+            >
+              <span aria-hidden="true" class="size-1.5 flex-none -translate-y-0.5 rounded-full bg-border" />
+              {item.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </details>
+)}
+
+<script>
+  // Highlight the section being read: the last heading above 30% of the viewport. IntersectionObserver only
+  // wakes this up when a heading crosses that line, so there is no scroll listener.
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]')];
+  const headings = links
+    .map((link) => document.getElementById(link.dataset.tocLink ?? ''))
+    .filter((heading): heading is HTMLElement => heading !== null);
+
+  const update = () => {
+    const line = window.innerHeight * 0.3;
+    const current = headings.filter((heading) => heading.getBoundingClientRect().top <= line).at(-1);
+    for (const link of links) {
+      if (current && link.dataset.tocLink === current.id) link.setAttribute('aria-current', 'true');
+      else link.removeAttribute('aria-current');
+    }
+  };
+
+  if (headings.length > 0 && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(update, { rootMargin: '0px 0px -70% 0px' });
+    for (const heading of headings) observer.observe(heading);
+    update();
+  }
+</script>

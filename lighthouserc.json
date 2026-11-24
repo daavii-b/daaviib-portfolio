@@ -8,7 +8,8 @@
         "http://localhost:4322/blog",
         "http://localhost:4322/projects",
         "http://localhost:4322/about",
-        "http://localhost:4322/now"
+        "http://localhost:4322/now",
+        "http://localhost:4322/blog/por-que-escolhi-astro"
       ],
       "numberOfRuns": 3
     },

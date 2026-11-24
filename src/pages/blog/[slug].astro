@@ -2,29 +2,58 @@
 import type { GetStaticPaths } from 'astro';
 import { render } from 'astro:content';
 
+import CodeBlocks from '@/components/CodeBlocks.astro';
 import ContactCTA from '@/components/ContactCTA.astro';
+import Icon from '@/components/icons/Icon.astro';
+import Note from '@/components/mdx/Note.astro';
+import PostCard from '@/components/PostCard.astro';
+import SectionHeader from '@/components/SectionHeader.astro';
+import SeriesList from '@/components/SeriesList.astro';
+import ShareLinks from '@/components/ShareLinks.astro';
+import TableOfContents from '@/components/TableOfContents.astro';
 import PostCover from '@/components/ui/PostCover.astro';
 import Tag from '@/components/ui/Tag.astro';
+import { SITE } from '@/config/site';
 import { DEFAULT_LOCALE } from '@/i18n/config';
-import { formatDate, localizePath, t } from '@/i18n/utils';
+import { localizePath, t } from '@/i18n/utils';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getPosts } from '@/lib/collections';
 import { findTranslation } from '@/lib/content';
+import { relatedPosts } from '@/lib/related';
+import { seriesPosition } from '@/lib/series';
+import { blogPostingJsonLd, serializeJsonLd } from '@/lib/structured-data';
+import { buildToc } from '@/lib/toc';
 
 export const getStaticPaths = (async () => {
   const posts = await getPosts(DEFAULT_LOCALE);
   const allLocales = [...posts]; // add other locales' posts here when they exist
   return posts.map((post) => ({
     params: { slug: post.data.slug },
-    props: { post, allLocales },
+    props: { post, posts, allLocales },
   }));
 }) satisfies GetStaticPaths;
 
-const { post, allLocales } = Astro.props;
+const { post, posts, allLocales } = Astro.props;
 const lang = post.data.lang;
-const { Content } = await render(post);
-const minutes = post.minutesRead;
+const { Content, headings } = await render(post);
 const firstTag = post.data.tags[0] ?? 'blog';
+const path = localizePath(`/blog/${post.data.slug}`, lang);
+const url = new URL(path, Astro.site).href;
+
+const toc = buildToc(headings);
+const series = seriesPosition(post, posts, (p) => localizePath(`/blog/${p.data.slug}`, p.data.lang));
+const showSeriesList = series !== undefined && series.total >= 2;
+const related = relatedPosts(post, posts);
+const jsonLd = blogPostingJsonLd({
+  title: post.data.title,
+  description: post.data.description,
+  url,
+  publishedAt: post.data.publishedAt,
+  updatedAt: post.data.updatedAt,
+  tags: post.data.tags,
+  lang,
+  author: { name: SITE.author, url: new URL(localizePath('/', lang), Astro.site).href },
+});
 
 const alternates = (['en'] as const)
   .map((other) => findTranslation(allLocales, post, other))
@@ -41,39 +70,97 @@ const alternates = (['en'] as const)
   publishedAt={post.data.publishedAt}
   alternates={alternates}
 >
-  <article class="mx-auto max-w-content px-5 pb-24 md:px-10">
-    <header class="max-w-[760px] pt-6 md:pt-12">
-      <a
-        href={localizePath('/blog', lang)}
-        class="-ml-1 inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-text-muted hover:text-text"
-      >
-        ← {t(lang, 'blog.back')}
-      </a>
-      <p class="text-meta mt-4 text-text-muted md:mt-6">
-        {`${t(lang, 'blog.publishedOn')} `}
-        <time datetime={post.data.publishedAt.toISOString()}>{formatDate(post.data.publishedAt, lang)}</time>
-        {` · ${t(lang, 'blog.readingTime', { minutes })}`}
-      </p>
-      <h1 class="text-display-lg mt-4 md:mt-5">{post.data.title}</h1>
-      <p class="mt-3 text-lg text-text-muted md:mt-4 md:text-xl">{post.data.description}</p>
-    </header>
+  <div class="reading-progress" aria-hidden="true"></div>
 
-    <div class="mt-8 md:mt-12">
-      <PostCover keyword={post.data.keyword ?? firstTag} label={firstTag} size="wide" />
-    </div>
+  <div class="mx-auto max-w-content px-5 pb-14 md:px-10 md:pb-24">
+    <article>
+      <header class="max-w-[760px] pt-6 md:pt-12">
+        <a
+          href={localizePath('/blog', lang)}
+          class="-ml-1 inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-text-muted hover:text-text"
+        >
+          <Icon name="chevronLeft" size={18} />
+          {t(lang, 'blog.back')}
+        </a>
+        <div class="mt-4 flex flex-wrap items-center gap-3 md:mt-6">
+          {series && (
+            <Tag variant="series">
+              {`${t(lang, 'article.series')} · ${series.name} · ${t(lang, 'article.seriesPosition', { n: series.index, total: series.total })}`}
+            </Tag>
+          )}
+          <p class="text-meta text-text-muted">
+            <time datetime={post.data.publishedAt.toISOString()}>
+              {post.data.publishedAt.toISOString().slice(0, 10)}
+            </time>
+            {` · ${t(lang, 'blog.readingTime', { minutes: post.minutesRead })}`}
+          </p>
+        </div>
+        <h1 class="text-display-lg mt-4 md:mt-5">{post.data.title}</h1>
+        <p class="mt-3 text-lg text-text-muted md:mt-4 md:text-xl">{post.data.description}</p>
+      </header>
 
-    <div class="mt-10 max-w-measure md:mt-16">
-      <div class="prose max-w-none md:prose-lg">
-        <Content />
+      <div class="mt-8 md:mt-12">
+        <PostCover keyword={post.data.keyword ?? firstTag} label={firstTag} size="wide" />
       </div>
-      <div class="mt-10 flex flex-wrap gap-2">
-        {post.data.tags.map((tag) => (
-          <Tag href={localizePath(`/blog/tags/${tag}`, lang)}>{tag}</Tag>
-        ))}
+
+      <div class="mt-8 md:mt-16 min-[1180px]:grid min-[1180px]:grid-cols-[minmax(0,680px)_280px] min-[1180px]:items-start min-[1180px]:justify-between min-[1180px]:gap-16">
+        <div class="min-w-0">
+          {toc.length > 0 && (
+            <div class="mb-8 min-[1180px]:hidden">
+              <TableOfContents items={toc} lang={lang} variant="details" />
+            </div>
+          )}
+
+          <div class="prose max-w-none md:prose-lg">
+            <Content components={{ Note }} />
+          </div>
+
+          {post.data.tags.length > 0 && (
+            <div class="mt-10 flex flex-wrap gap-2">
+              {post.data.tags.map((tag) => (
+                <Tag>{tag}</Tag>
+              ))}
+            </div>
+          )}
+
+          <div class="mt-10 flex flex-col gap-8 min-[1180px]:hidden">
+            <ShareLinks url={url} title={post.data.title} lang={lang} id="end" />
+            {showSeriesList && <SeriesList series={series} lang={lang} boxed />}
+          </div>
+
+          <div class="mt-12">
+            <ContactCTA lang={lang} kind="article" />
+          </div>
+        </div>
+
+        <aside
+          aria-label={t(lang, 'article.nav')}
+          class="sticky top-8 hidden flex-col gap-8 min-[1180px]:flex"
+        >
+          {toc.length > 0 && <TableOfContents items={toc} lang={lang} variant="aside" />}
+          {showSeriesList && <SeriesList series={series} lang={lang} />}
+          <ShareLinks url={url} title={post.data.title} lang={lang} id="aside" />
+        </aside>
       </div>
-      <div class="mt-12">
-        <ContactCTA lang={lang} kind="article" />
-      </div>
-    </div>
-  </article>
+    </article>
+
+    {related.length > 0 && (
+      <section aria-labelledby="related" class="mt-16 border-t border-border pt-10 md:mt-24 md:pt-12">
+        <SectionHeader
+          id="related"
+          title={t(lang, 'article.continue')}
+          href={localizePath('/blog', lang)}
+          linkLabel={t(lang, 'blog.back')}
+        />
+        <div class="mt-6 grid gap-x-8 gap-y-12 sm:grid-cols-2 md:mt-8 lg:grid-cols-3">
+          {related.map((other) => (
+            <PostCard post={other} lang={lang} />
+          ))}
+        </div>
+      </section>
+    )}
+  </div>
+
+  <CodeBlocks lang={lang} />
+  <script type="application/ld+json" set:html={serializeJsonLd(jsonLd)} />
 </BaseLayout>

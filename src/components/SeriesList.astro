@@ -1,0 +1,39 @@
+---
+import type { Locale } from '@/i18n/config';
+import { t } from '@/i18n/utils';
+import type { SeriesPosition } from '@/lib/series';
+
+/** Numbered list of the posts in a series; the current one highlighted and not linked. `boxed` for the narrow layout. */
+interface Props {
+  series: SeriesPosition;
+  lang: Locale;
+  boxed?: boolean;
+}
+
+const { series, lang, boxed = false } = Astro.props;
+---
+
+<div class:list={[boxed && 'rounded-lg border border-border p-5']}>
+  <p class="text-eyebrow mb-2.5 text-text-muted">{`${t(lang, 'article.series')} · ${series.name}`}</p>
+  <ol class="flex flex-col gap-2.5">
+    {series.items.map((item, i) => (
+      <li class="flex gap-2.5">
+        <span
+          aria-hidden="true"
+          class:list={['text-meta flex-none', item.current ? 'text-accent-2' : 'text-text-muted']}
+        >
+          {String(i + 1).padStart(2, '0')}
+        </span>
+        {item.current ? (
+          <span aria-current="page" class="text-sm font-semibold text-text">
+            {item.title}
+          </span>
+        ) : (
+          <a href={item.href} class="text-sm text-text-muted transition-colors hover:text-text">
+            {item.title}
+          </a>
+        )}
+      </li>
+    ))}
+  </ol>
+</div>

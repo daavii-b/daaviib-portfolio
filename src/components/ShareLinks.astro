@@ -1,0 +1,68 @@
+---
+import type { Locale } from '@/i18n/config';
+import { t } from '@/i18n/utils';
+
+import Icon from './icons/Icon.astro';
+
+/**
+ * "Compartilhar": copy link (needs JS, so revealed by the script), LinkedIn and X as plain share URLs in a new tab.
+ * No third-party script is loaded.
+ */
+interface Props {
+  url: string;
+  title: string;
+  lang: Locale;
+  /** Unique suffix for the label id (the block renders twice: side column and end of article). */
+  id: string;
+}
+
+const { url, title, lang, id } = Astro.props;
+const linkedin = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+const x = `https://x.com/intent/post?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`;
+const pill =
+  'inline-flex min-h-9 items-center gap-1.5 rounded-full border border-border px-3 text-[13px] font-medium text-text-muted transition-colors hover:bg-surface hover:text-text';
+---
+
+<div role="group" aria-labelledby={`share-${id}`}>
+  <p id={`share-${id}`} class="text-eyebrow mb-2.5 text-text-muted">
+    {t(lang, 'article.share')}
+  </p>
+  <div class="flex flex-wrap gap-2">
+    <button
+      type="button"
+      hidden
+      data-copy-link={url}
+      data-copied={t(lang, 'article.linkCopied')}
+      class:list={[pill, 'cursor-pointer']}
+    >
+      <Icon name="link" size={14} class="in-data-[copied]:hidden" />
+      <Icon name="check" size={14} class="hidden text-success in-data-[copied]:block" />
+      <span data-label aria-live="polite">
+        {t(lang, 'article.copyLink')}
+      </span>
+    </button>
+    <a href={linkedin} target="_blank" rel="noopener noreferrer" class={pill}>
+      LinkedIn<span class="sr-only"> {t(lang, 'article.newTab')}</span>
+    </a>
+    <a href={x} target="_blank" rel="noopener noreferrer" class={pill}>
+      X<span class="sr-only"> {t(lang, 'article.newTab')}</span>
+    </a>
+  </div>
+</div>
+
+<script>
+  import { copyText, flagCopied } from '@/scripts/clipboard';
+
+  for (const button of document.querySelectorAll<HTMLButtonElement>('[data-copy-link]')) {
+    const label = button.querySelector<HTMLElement>('[data-label]');
+    const original = label?.textContent ?? '';
+    button.hidden = false;
+    button.addEventListener('click', async () => {
+      await copyText(button.dataset.copyLink ?? '');
+      if (label) label.textContent = button.dataset.copied ?? '';
+      flagCopied(button, () => {
+        if (label) label.textContent = original;
+      });
+    });
+  }
+</script>

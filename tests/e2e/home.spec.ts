@@ -11,13 +11,18 @@ test.describe('home page', () => {
     await expect(page.getByRole('main').getByText('Aberto a projetos PJ e freelas')).toBeVisible();
     await expect(page.getByRole('link', { name: 'Ver projetos' })).toHaveAttribute('href', '/projects');
 
-    // No post is published yet, so "Últimos artigos" is hidden rather than empty.
     await expect(page.locator('main h2')).toHaveText([
       'Agora',
       'Projetos em destaque',
+      'Últimos artigos',
       'Experiência',
       'Vamos conversar?',
     ]);
+    await expect(
+      page.getByRole('region', { name: 'Últimos artigos' }).getByRole('link', {
+        name: 'Por que escolhi Astro para este site',
+      }),
+    ).toHaveAttribute('href', '/blog/por-que-escolhi-astro');
     await expect(page.getByRole('main')).not.toContainText(PLACEHOLDER);
   });
 

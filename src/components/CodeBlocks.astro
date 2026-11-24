@@ -1,0 +1,50 @@
+---
+import type { Locale } from '@/i18n/config';
+import { t } from '@/i18n/utils';
+
+import Icon from './icons/Icon.astro';
+
+/**
+ * Wires the copy buttons that `src/lib/code-frame.ts` adds (hidden) to every code block: fills them with the localized
+ * label and icons from the template below, reveals them, and copies the block's code with "Copiado" feedback.
+ * Without JavaScript the buttons stay hidden, since they could not work.
+ */
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+---
+
+<template data-copy-code-template data-copy={t(lang, 'code.copy')} data-copied={t(lang, 'code.copied')}>
+  <Icon name="copy" size={16} class="in-data-[copied]:hidden" />
+  <Icon name="check" size={16} class="hidden text-success in-data-[copied]:block" />
+  <span data-label aria-live="polite">
+    {t(lang, 'code.copy')}
+  </span>
+</template>
+
+<script>
+  import { copyText, flagCopied } from '@/scripts/clipboard';
+
+  const template = document.querySelector<HTMLTemplateElement>('[data-copy-code-template]');
+
+  if (template) {
+    const { copy = '', copied = '' } = template.dataset;
+    for (const button of document.querySelectorAll<HTMLButtonElement>('[data-copy-code]')) {
+      const pre = button.parentElement?.querySelector('pre');
+      if (!pre) continue;
+      button.append(template.content.cloneNode(true));
+      const label = button.querySelector<HTMLElement>('[data-label]');
+      button.hidden = false;
+
+      button.addEventListener('click', async () => {
+        await copyText(pre.textContent ?? '', pre);
+        if (label) label.textContent = copied;
+        flagCopied(button, () => {
+          if (label) label.textContent = copy;
+        });
+      });
+    }
+  }
+</script>

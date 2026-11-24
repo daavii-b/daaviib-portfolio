@@ -45,12 +45,15 @@ before planning any change — it is the source of truth for principles and qual
   Never write raw hex/rgb in components. One accent (cobalt) per screen; borders, not shadows.
 - Reuse components before writing markup: `ui/Button` (`solid` on patterned surfaces), `ui/Tag`, `ui/PostCover`, `PostCard`,
   `ProjectCard`, `PostList`, `ContactCTA`, `SectionHeader`, `DefinitionList`, `ExperienceList`, `ClosingBox`,
-  `AvailabilityLine`, `CopyEmailButton`, `icons/Icon`. Browser-only helpers live in `src/scripts/` (e.g. `clipboard.ts`). Any element with `data-contact-open` (a `mailto:` link) opens the contact dialog.
+  `AvailabilityLine`, `CopyEmailButton`, `TableOfContents`, `SeriesList`, `ShareLinks`, `CodeBlocks`, `mdx/Note`, `icons/Icon`. Browser-only helpers live in `src/scripts/` (e.g. `clipboard.ts`). Any element with `data-contact-open` (a `mailto:` link) opens the contact dialog.
 - Contact data and availability: `src/config/site.ts`. Pages pass `contact={{ kind, title? }}` and `section` to `BaseLayout`.
 - shadcn/ui is deferred; token names already have shadcn aliases (`--background`, `--primary`…) for a later `shadcn init`.
 - Every new page gets an entry in `tests/e2e/site.spec.ts` (renders + axe).
 - Optional files render only when present: CV at `public/cv/davi-brito-cv.pdf`, portrait at `src/assets/about/davi.jpg`.
 - Content links to site paths go through `resolveInternalLink` so drafts never become 404 links.
+- Articles: code fences accept `title="file.ts"` (framed by `src/lib/code-frame.ts`, a Shiki transformer); `<Note>` is
+  passed to MDX by the article page; syntax colours come from design tokens (`--astro-code-*` in `global.css`).
+  Tags render without links until tag pages exist.
 - Repository docs and code are in English; site content is in Portuguese first.
 
 ## Astro knowledge

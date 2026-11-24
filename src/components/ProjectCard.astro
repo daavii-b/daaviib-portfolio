@@ -10,22 +10,24 @@ import Tag from './ui/Tag.astro';
 interface Props {
   project: CollectionEntry<'projects'>;
   lang: Locale;
+  /** h2 when the card sits directly under the page's h1 (projects index), h3 under a section heading. */
+  headingLevel?: 'h2' | 'h3';
 }
 
-const { project, lang } = Astro.props;
+const { project, lang, headingLevel: Heading = 'h3' } = Astro.props;
 const { name, summary, status, stack, slug, keyword } = project.data;
 ---
 
 <article class="group relative flex flex-col gap-3.5">
   <PostCover keyword={keyword ?? name} label={stack[0] ?? t(lang, 'projects.title')} />
-  <h3 class="text-heading-sm">
+  <Heading class="text-heading-sm">
     <a
       href={localizePath(`/projects/${slug}`, lang)}
       class="text-text transition-colors duration-200 group-hover:text-accent after:absolute after:inset-0 after:content-['']"
     >
       {name}
     </a>
-  </h3>
+  </Heading>
   <p class="text-base text-text-muted">{summary}</p>
   <div class="flex flex-wrap gap-2">
     <Tag variant="neutral">{t(lang, `projects.status.${status}`)}</Tag>

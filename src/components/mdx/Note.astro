@@ -1,0 +1,17 @@
+---
+import Icon from '@/components/icons/Icon.astro';
+import { t, toLocale } from '@/i18n/utils';
+
+/** MDX `<Note>` for highlighted remarks inside articles: border, surface background, accent info icon. */
+const lang = toLocale(Astro.currentLocale);
+---
+
+<aside
+  aria-label={t(lang, 'article.note')}
+  class="not-prose my-7 flex gap-3 rounded-md border border-border bg-surface p-4"
+>
+  <Icon name="info" size={20} class="mt-0.5 flex-none text-accent" />
+  <div class="text-base leading-relaxed text-text [&_code]:rounded-sm [&_code]:border [&_code]:border-border [&_code]:bg-bg [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[0.85em]">
+    <slot />
+  </div>
+</aside>

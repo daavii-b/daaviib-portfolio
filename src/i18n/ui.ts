@@ -77,6 +77,18 @@ const pt = {
   'about.closingTitle': 'Vamos trabalhar juntos?',
   'about.closingText': 'Estou aberto a projetos PJ e freelas. A mensagem já vem escrita.',
   'now.updatedOn': 'Atualizado em',
+  'article.toc': 'Neste artigo',
+  'article.nav': 'Navegação do artigo',
+  'article.series': 'Série',
+  'article.seriesPosition': '{n} de {total}',
+  'article.share': 'Compartilhar',
+  'article.copyLink': 'Copiar link',
+  'article.linkCopied': 'Link copiado',
+  'article.newTab': '(abre em nova aba)',
+  'article.continue': 'Continue lendo',
+  'article.note': 'Nota',
+  'code.copy': 'Copiar',
+  'code.copied': 'Copiado',
 } as const;
 
 export type UiKey = keyof typeof pt;
@@ -156,6 +168,18 @@ const en: Record<UiKey, string> = {
   'about.closingTitle': 'Shall we work together?',
   'about.closingText': 'I’m open to contract and freelance work. The message comes already written.',
   'now.updatedOn': 'Updated on',
+  'article.toc': 'On this page',
+  'article.nav': 'Article navigation',
+  'article.series': 'Series',
+  'article.seriesPosition': '{n} of {total}',
+  'article.share': 'Share',
+  'article.copyLink': 'Copy link',
+  'article.linkCopied': 'Link copied',
+  'article.newTab': '(opens in a new tab)',
+  'article.continue': 'Keep reading',
+  'article.note': 'Note',
+  'code.copy': 'Copy',
+  'code.copied': 'Copied',
 };
 
 export const ui: Record<Locale, Record<UiKey, string>> = { pt, en };

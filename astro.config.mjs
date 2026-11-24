@@ -7,6 +7,7 @@ import { defineConfig } from 'astro/config';
 
 import { DEFAULT_LOCALE, HTML_LANG, LOCALES } from './src/i18n/config.ts';
 import { readingTimePlugin } from './src/lib/reading-time.ts';
+import { codeFrameTransformer } from './src/lib/code-frame.ts';
 
 /**
  * Public URL for canonical links, sitemap, RSS and robots.txt.
@@ -44,7 +45,11 @@ export default defineConfig({
     // MDX extends this config, so the plugin also runs for .mdx files.
     processor: satteri({ mdastPlugins: [readingTimePlugin] }),
     shikiConfig: {
-      themes: { light: 'github-light', dark: 'github-dark' },
+      // Token colours come from the design system (see `--astro-code-*` in global.css), so both themes follow it.
+      theme: 'css-variables',
+      // File-name header + copy button for code blocks. The transformer is typed with minimal local hast types
+      // (no direct `shiki` dependency), so it is asserted to Shiki's wider transformer type here.
+      transformers: [/** @type {never} */ (codeFrameTransformer)],
     },
   },
   vite: {
