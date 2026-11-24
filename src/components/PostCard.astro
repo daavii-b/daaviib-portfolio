@@ -37,7 +37,7 @@ const firstTag = tags[0] ?? 'blog';
     {tags.length > 0 && (
       <div class="relative z-10 mt-1 flex flex-wrap gap-2">
         {tags.map((tag) => (
-          <Tag href={localizePath(`/blog/tags/${tag}`, lang)}>{tag}</Tag>
+          <Tag>{tag}</Tag>
         ))}
       </div>
     )}
