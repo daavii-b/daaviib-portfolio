@@ -1,17 +1,5 @@
 import type { Locale } from '@/i18n/config';
 
-const WORDS_PER_MINUTE = 200;
-
-/** Reading time in whole minutes (minimum 1), ignoring code fences and markup. */
-export function readingTime(markdown: string): number {
-  const text = markdown
-    .replace(/```[\s\S]*?```/g, ' ')
-    .replace(/<[^>]+>/g, ' ')
-    .replace(/[#>*_`[\]()!-]/g, ' ');
-  const words = text.split(/\s+/).filter(Boolean).length;
-  return Math.max(1, Math.ceil(words / WORDS_PER_MINUTE));
-}
-
 interface Publishable {
   data: { lang: Locale; draft: boolean; publishedAt?: Date };
 }

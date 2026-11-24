@@ -1,13 +1,11 @@
 ---
-import type { CollectionEntry } from 'astro:content';
-
 import type { Locale } from '@/i18n/config';
 import { localizePath, t } from '@/i18n/utils';
-import { readingTime } from '@/lib/content';
+import type { Post } from '@/lib/collections';
 
 /** Compact list of posts (date · title · description), used on the home page. */
 interface Props {
-  posts: CollectionEntry<'posts'>[];
+  posts: Post[];
   lang: Locale;
 }
 
@@ -33,7 +31,7 @@ const { posts, lang } = Astro.props;
           <span class="text-[15px] text-text-muted">{post.data.description}</span>
         </div>
         <span class="text-meta hidden text-text-muted sm:block">
-          {t(lang, 'blog.readingTime', { minutes: readingTime(post.body ?? '') })}
+          {t(lang, 'blog.readingTime', { minutes: post.minutesRead })}
         </span>
       </li>
     ))}

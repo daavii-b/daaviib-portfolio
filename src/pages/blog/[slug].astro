@@ -9,7 +9,7 @@ import { DEFAULT_LOCALE } from '@/i18n/config';
 import { formatDate, localizePath, t } from '@/i18n/utils';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getPosts } from '@/lib/collections';
-import { findTranslation, readingTime } from '@/lib/content';
+import { findTranslation } from '@/lib/content';
 
 export const getStaticPaths = (async () => {
   const posts = await getPosts(DEFAULT_LOCALE);
@@ -23,7 +23,7 @@ export const getStaticPaths = (async () => {
 const { post, allLocales } = Astro.props;
 const lang = post.data.lang;
 const { Content } = await render(post);
-const minutes = readingTime(post.body ?? '');
+const minutes = post.minutesRead;
 const firstTag = post.data.tags[0] ?? 'blog';
 
 const alternates = (['en'] as const)

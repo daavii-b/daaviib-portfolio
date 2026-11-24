@@ -1,18 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { byPublishedDesc, findTranslation, isPublished, readingTime } from '@/lib/content';
-
-describe('readingTime', () => {
-  it('is at least one minute', () => {
-    expect(readingTime('')).toBe(1);
-  });
-
-  it('counts ~200 words per minute and ignores code fences', () => {
-    const prose = Array.from({ length: 450 }, () => 'palavra').join(' ');
-    const code = '```ts\n' + Array.from({ length: 1000 }, () => 'x').join(' ') + '\n```';
-    expect(readingTime(`${prose}\n${code}`)).toBe(3);
-  });
-});
+import { byPublishedDesc, findTranslation, isPublished } from '@/lib/content';
 
 describe('isPublished', () => {
   const now = new Date('2026-11-23T12:00:00Z');

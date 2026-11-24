@@ -1,10 +1,12 @@
 // @ts-check
+import { satteri } from '@astrojs/markdown-satteri';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'astro/config';
 
 import { DEFAULT_LOCALE, HTML_LANG, LOCALES } from './src/i18n/config.ts';
+import { readingTimePlugin } from './src/lib/reading-time.ts';
 
 // TODO: replace with the real domain once it is purchased.
 const SITE_URL = process.env.SITE_URL ?? 'https://portfolio.vercel.app';
@@ -31,6 +33,8 @@ export default defineConfig({
     }),
   ],
   markdown: {
+    // MDX extends this config, so the plugin also runs for .mdx files.
+    processor: satteri({ mdastPlugins: [readingTimePlugin] }),
     shikiConfig: {
       themes: { light: 'github-light', dark: 'github-dark' },
     },
