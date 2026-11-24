@@ -6,6 +6,9 @@
 
 **Status**: Approved
 
+> The "Agora" panel and the `/now` page described here (User Story 4, FR-001, FR-003, FR-011) are superseded by
+> [`specs/005-now-timeline`](../005-now-timeline/spec.md).
+
 **Input**: User description: "Implement complete Home and About pages, following the approved screens and the design system, with experiences, a 'Now' panel and a new project entry as typed content."
 
 Visual source of truth: the approved **Home** and **Sobre** screens in **daaviib — Telas** (desktop in the light
