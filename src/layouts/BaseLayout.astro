@@ -7,7 +7,7 @@ import SEO, { type Alternate } from '@/components/SEO.astro';
 import SiteHeader from '@/components/SiteHeader.astro';
 import ThemeScript from '@/components/ThemeScript.astro';
 import { HTML_LANG } from '@/i18n/config';
-import { getLocaleFromPath, t } from '@/i18n/utils';
+import { t, toLocale } from '@/i18n/utils';
 import type { ContactContext } from '@/lib/contact';
 
 interface Props {
@@ -32,7 +32,7 @@ const {
   type = 'website',
   publishedAt,
 } = Astro.props;
-const lang = getLocaleFromPath(Astro.url.pathname);
+const lang = toLocale(Astro.currentLocale);
 const siteTitle = t(lang, 'site.title');
 const pageTitle = title ? `${title} · ${siteTitle}` : siteTitle;
 ---
