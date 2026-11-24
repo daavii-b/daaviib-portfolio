@@ -8,3 +8,5 @@ test-results
 .lighthouseci
 .specify
 .claude/skills/speckit-*
+.claude/skills/astro-framework
+.claude/skills/learning-astro
