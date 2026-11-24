@@ -8,8 +8,16 @@ import { defineConfig } from 'astro/config';
 import { DEFAULT_LOCALE, HTML_LANG, LOCALES } from './src/i18n/config.ts';
 import { readingTimePlugin } from './src/lib/reading-time.ts';
 
-// TODO: replace with the real domain once it is purchased.
-const SITE_URL = process.env.SITE_URL ?? 'https://portfolio.vercel.app';
+/**
+ * Public URL for canonical links, sitemap, RSS and robots.txt.
+ * 1. SITE_URL, when set explicitly.
+ * 2. On Vercel, the project's production domain (VERCEL_PROJECT_PRODUCTION_URL is set by Vercel at build
+ *    time and follows the custom domain once one is added).
+ * 3. Local development.
+ */
+const vercelProductionUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL;
+const SITE_URL =
+  process.env.SITE_URL ?? (vercelProductionUrl ? `https://${vercelProductionUrl}` : 'http://localhost:4321');
 
 export default defineConfig({
   site: SITE_URL,
