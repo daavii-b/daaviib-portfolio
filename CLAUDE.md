@@ -37,7 +37,9 @@ before planning any change — it is the source of truth for principles and qual
 
 ## Conventions
 
-- Route segments are English; slugs are translated (`/blog/construindo-o-prumo`, `/en/blog/building-prumo`).
+- Route segments are English; each locale's entry declares its own `slug` (`/blog/<slug>`, `/en/blog/<slug>`). Whether
+  English slugs are translated or kept equal to the Portuguese ones is still open: the code supports both.
+- English posts are written by the author in English, not translated from Portuguese.
 - Never hard-code UI text in components: add a key to `src/i18n/ui.ts` for **both** `pt` and `en`.
 - Import with the `@/` alias; type-only imports use `import type`.
 - Design tokens live in `src/styles/global.css` (source: the **daaviib — Design System** artifact). Use only token utilities:
@@ -72,7 +74,8 @@ before planning any change — it is the source of truth for principles and qual
 
 ## Project skills
 
-- `new-post` — create a blog post with valid frontmatter.
-- `translate-content` — add the English version of a post or project.
+- `write-post` — draft or revise a blog post in the author's voice: valid frontmatter, facts from the repo, anti-slop
+  rules and `scripts/slop-check.mjs`.
+- `translate-content` — add the English version of a post (written by the author) or project, and enable `/en` routes.
 - `add-page` — add a route with i18n strings and tests.
 - `quality-gate` — run all checks and prepare a PR.
