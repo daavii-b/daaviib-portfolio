@@ -72,7 +72,8 @@ before planning any change — it is the source of truth for principles and qual
 
 ## Project skills
 
-- `new-post` — create a blog post with valid frontmatter.
+- `write-post` — draft or revise a blog post in the author's voice: valid frontmatter, facts from the repo, anti-slop
+  rules and `scripts/slop-check.mjs`.
 - `translate-content` — add the English version of a post or project.
 - `add-page` — add a route with i18n strings and tests.
 - `quality-gate` — run all checks and prepare a PR.
