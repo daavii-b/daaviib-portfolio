@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { LOCALES } from '@/i18n/config';
 import { ui } from '@/i18n/ui';
-import { formatDate, localizePath, t, toLocale } from '@/i18n/utils';
+import { formatDate, formatShortDate, localizePath, t, toLocale } from '@/i18n/utils';
 
 describe('t', () => {
   it('returns the string for the locale', () => {
@@ -63,5 +63,14 @@ describe('formatDate', () => {
     const date = new Date('2026-11-23T00:00:00Z');
     expect(formatDate(date, 'pt')).toBe('23 de novembro de 2026');
     expect(formatDate(date, 'en')).toBe('November 23, 2026');
+  });
+});
+
+describe('formatShortDate', () => {
+  it('writes day, short month and year without punctuation', () => {
+    const date = new Date('2026-11-23T00:00:00Z');
+    expect(formatShortDate(date, 'pt')).toBe('23 nov 2026');
+    expect(formatShortDate(date, 'en')).toBe('23 Nov 2026');
+    expect(formatShortDate(new Date('2026-05-02T00:00:00Z'), 'pt')).toBe('2 mai 2026');
   });
 });

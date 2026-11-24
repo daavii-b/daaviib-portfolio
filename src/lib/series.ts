@@ -31,9 +31,7 @@ export function seriesPosition<T extends SeriesPost>(
 ): SeriesPosition | undefined {
   const name = post.data.series;
   if (!name) return undefined;
-  const inSeries = posts
-    .filter((p) => p.data.series === name && p.data.lang === post.data.lang)
-    .sort((a, b) => a.data.publishedAt.getTime() - b.data.publishedAt.getTime());
+  const inSeries = byPublication(name, post.data.lang, posts);
   const index = inSeries.findIndex((p) => p.id === post.id);
   if (index === -1) return undefined;
   return {
@@ -47,4 +45,33 @@ export function seriesPosition<T extends SeriesPost>(
       current: p.id === post.id,
     })),
   };
+}
+
+function byPublication<T extends SeriesPost>(name: string, lang: Locale, posts: readonly T[]): T[] {
+  return posts
+    .filter((p) => p.data.series === name && p.data.lang === lang)
+    .sort((a, b) => a.data.publishedAt.getTime() - b.data.publishedAt.getTime());
+}
+
+export interface NumberedSeriesPost {
+  id: string;
+  title: string;
+  href: string;
+  /** Two-digit position in the series: "01", "02"… */
+  number: string;
+}
+
+/** Posts of a series in a locale, among `posts` (already filtered to published ones), in series order and numbered. */
+export function seriesPosts<T extends SeriesPost>(
+  name: string,
+  lang: Locale,
+  posts: readonly T[],
+  hrefFor: (post: T) => string,
+): NumberedSeriesPost[] {
+  return byPublication(name, lang, posts).map((p, i) => ({
+    id: p.id,
+    title: p.data.title,
+    href: hrefFor(p),
+    number: String(i + 1).padStart(2, '0'),
+  }));
 }

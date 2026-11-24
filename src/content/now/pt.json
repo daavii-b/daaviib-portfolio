@@ -1,13 +1,43 @@
 {
   "lang": "pt",
   "updatedAt": "2026-11-23",
+  "status": "Construindo o [Prumo](/projects/prumo), escrevendo a série [Construindo este site](/projects/este-site) e aprendendo Astro com ela. Na faculdade, ADS na UniCesumar, com foco em algoritmos e IA aplicada ao desenvolvimento (SDD e RAG).",
   "items": [
-    { "label": "Construindo", "text": "Prumo", "href": "/projects/prumo" },
-    { "label": "Escrevendo", "text": "A série “Construindo este site”" },
+    {
+      "label": "Construindo",
+      "title": "Prumo",
+      "href": "/projects/prumo",
+      "linkLabel": "Ver o projeto"
+    },
+    {
+      "label": "Escrevendo",
+      "title": "A série Construindo este site",
+      "text": "Os bastidores deste site, decisão por decisão.",
+      "series": "Construindo este site"
+    },
     {
       "label": "Estudando",
-      "text": "ADS na UniCesumar, algoritmos e IA aplicada ao desenvolvimento (SDD e RAG)"
+      "title": "ADS na UniCesumar",
+      "text": "Além da faculdade, algoritmos e IA aplicada ao desenvolvimento: SDD (spec-driven development) e RAG."
     },
-    { "label": "Aprendendo", "text": "Astro, construindo este site com ele" }
+    {
+      "label": "Aprendendo",
+      "title": "Astro",
+      "text": "Aprendendo construindo: este site é o projeto de estudo.",
+      "href": "/blog/por-que-escolhi-astro",
+      "linkLabel": "Por que escolhi Astro"
+    }
+  ],
+  "history": [
+    {
+      "date": "2026-11-23",
+      "note": "Primeira versão desta página.",
+      "changes": [
+        { "kind": "added", "text": "Construindo o Prumo" },
+        { "kind": "added", "text": "Escrevendo a série Construindo este site" },
+        { "kind": "added", "text": "Estudando ADS na UniCesumar, algoritmos e IA" },
+        { "kind": "added", "text": "Aprendendo Astro" }
+      ]
+    }
   ]
 }

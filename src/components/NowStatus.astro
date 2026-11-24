@@ -1,0 +1,37 @@
+---
+import type { StatusSegment } from '@/lib/now';
+
+/**
+ * The "Now" status sentence, shared by the Home block and /now so the two never disagree.
+ * Pass segments already resolved with `resolveStatus` (links to unpublished pages are plain text).
+ */
+interface Props {
+  segments: StatusSegment[];
+  /** `home`: body size under the hero; `page`: the larger lead on /now. */
+  size?: 'home' | 'page';
+  class?: string;
+}
+
+const { segments, size = 'home', class: className } = Astro.props;
+---
+
+<p
+  class:list={[
+    'text-text',
+    size === 'home' ? 'text-[17px] leading-[1.65] md:text-lg' : 'text-[19px] leading-relaxed md:text-[22px]',
+    className,
+  ]}
+>
+  {segments.map((segment) =>
+    segment.href ? (
+      <a
+        href={segment.href}
+        class="underline decoration-border-strong underline-offset-4 hover:text-accent hover:decoration-accent"
+      >
+        {segment.text}
+      </a>
+    ) : (
+      segment.text
+    ),
+  )}
+</p>

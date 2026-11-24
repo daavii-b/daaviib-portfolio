@@ -37,3 +37,15 @@ export function formatDate(date: Date, lang: Locale): string {
     timeZone: 'UTC',
   }).format(date);
 }
+
+/** Compact date for lists and timelines: "23 nov 2026" / "23 Nov 2026" (no "de", no trailing dot). */
+export function formatShortDate(date: Date, lang: Locale): string {
+  const parts = new Intl.DateTimeFormat(HTML_LANG[lang], {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    timeZone: 'UTC',
+  }).formatToParts(date);
+  const part = (type: Intl.DateTimeFormatPartTypes) => parts.find((p) => p.type === type)?.value ?? '';
+  return `${part('day')} ${part('month').replace(/\.$/, '')} ${part('year')}`;
+}

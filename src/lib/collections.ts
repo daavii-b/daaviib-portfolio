@@ -41,10 +41,23 @@ export async function getExperiences(kind?: Experience['data']['kind']): Promise
   return sortExperiences(all);
 }
 
-/** The "Now" entry for a locale (Home panel and /now), if one exists. */
+/**
+ * The "Now" entry for a locale (Home block and /now), if one exists. Fails the build when an item names a series that
+ * has no posts at all in the locale (drafts included): a typo would otherwise hide the list silently.
+ */
 export async function getNow(lang: Locale): Promise<CollectionEntry<'now'> | undefined> {
-  const all = await getCollection('now', (entry) => entry.data.lang === lang);
-  return all[0];
+  const [entry] = await getCollection('now', (e) => e.data.lang === lang);
+  if (!entry) return undefined;
+  const posts = await getCollection('posts', (post) => post.data.lang === lang);
+  const seriesNames = new Set(posts.map((post) => post.data.series));
+  for (const item of entry.data.items) {
+    if (item.series !== undefined && !seriesNames.has(item.series)) {
+      throw new Error(
+        `Now (${lang}): item "${item.label}" references series "${item.series}", which has no posts`,
+      );
+    }
+  }
+  return entry;
 }
 
 /** About-page content for a locale, if one exists. */

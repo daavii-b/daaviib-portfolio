@@ -127,6 +127,7 @@
 
   /* Layout widths */
   --container-measure: 680px;
+  --container-lead: 760px;
   --container-content: 1080px;
   --container-wide: 1280px;
 
