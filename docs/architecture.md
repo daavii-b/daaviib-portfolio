@@ -20,14 +20,15 @@ Reader ──POST /api/newsletter/subscribe──▶ Serverless API ──▶ Po
 
 ## Decisions
 
-| Decision     | Choice                                                                                                           | Revisit when                                                        |
-| ------------ | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| Framework    | Astro, static output                                                                                             | —                                                                   |
-| Content      | MDX/JSON in Git, Zod-validated collections (`posts`, `projects`, `experiences`, `now`, `about`)                  | Someone else needs to write → headless CMS reading the same MDX     |
-| i18n         | `pt` default (no prefix), `en` under `/en/`; English route segments, translated slugs linked by `translationKey` | —                                                                   |
-| Newsletter   | Own implementation, post-v1, multiple lists (per project/topic), double opt-in, email = summary + link           | Maintenance outweighs value → managed service                       |
-| Share images | Built at build time by a static endpoint (Satori + resvg), one PNG per page, light theme                         | Build time grows noticeably with many posts → cache by content hash |
-| Hosting      | Vercel                                                                                                           | Build > 5 min or cost                                               |
+| Decision     | Choice                                                                                                                                     | Revisit when                                                        |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------- |
+| Framework    | Astro, static output                                                                                                                       | —                                                                   |
+| Content      | MDX/JSON in Git, Zod-validated collections (`posts`, `projects`, `experiences`, `now`, `about`)                                            | Someone else needs to write → headless CMS reading the same MDX     |
+| i18n         | `pt` default (no prefix), `en` under `/en/`; English route segments, translated slugs linked by `translationKey`                           | —                                                                   |
+| Newsletter   | Own implementation, post-v1, multiple lists (per project/topic), double opt-in, email = summary + link                                     | Maintenance outweighs value → managed service                       |
+| Share images | Built at build time by a static endpoint (Satori + resvg), one PNG per page, light theme                                                   | Build time grows noticeably with many posts → cache by content hash |
+| Now page     | One JSON entry per locale drives the Home sentence and `/now`; history kept in the file, newest date = `updatedAt` (build fails otherwise) | History grows long → paginate or archive by year                    |
+| Hosting      | Vercel                                                                                                                                     | Build > 5 min or cost                                               |
 
 ## Design system
 

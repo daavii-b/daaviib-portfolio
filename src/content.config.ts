@@ -3,6 +3,7 @@ import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
 import { LOCALES } from '@/i18n/config';
+import { CHANGE_KINDS, historyDateMismatch, statusIssues } from '@/lib/now';
 
 /** Entry id = path without extension (e.g. `pt/prumo`), so equal slugs in different locales never collide. */
 const generateId = ({ entry }: { entry: string }) => entry.replace(/\.(mdx?|json)$/, '');
@@ -79,26 +80,58 @@ const experiences = defineCollection({
   }),
 });
 
-/** What I'm focused on right now (Home panel and /now). One file per locale: `now/pt.json`. */
+const siteOrHttps = z.string().regex(/^(\/|https:\/\/)/, 'href must be a site path or an https URL');
+
+/**
+ * What I'm focused on right now (Home block and /now). One file per locale: `now/pt.json`.
+ * `status` is one sentence with inline links (`[Prumo](/projects/prumo)`); `updatedAt` must equal the newest history
+ * date, so the page never claims an update the timeline does not show. Series names are checked in `getNow`.
+ */
 const now = defineCollection({
   loader: glob({ pattern: '**/*.json', base: './src/content/now', generateId }),
-  schema: z.object({
-    lang: z.enum(LOCALES),
-    updatedAt: z.coerce.date(),
-    items: z
-      .array(
-        z.object({
-          label: z.string().min(1),
-          text: z.string().min(1),
-          /** A site path (`/projects/prumo`) or an https URL. Unpublished site paths render as text. */
-          href: z
-            .string()
-            .regex(/^(\/|https:\/\/)/, 'href must be a site path or an https URL')
-            .optional(),
+  schema: z
+    .object({
+      lang: z.enum(LOCALES),
+      updatedAt: z.coerce.date(),
+      status: z
+        .string()
+        .min(1)
+        .max(400)
+        .superRefine((status, ctx) => {
+          for (const message of statusIssues(status)) ctx.addIssue({ code: 'custom', message });
         }),
-      )
-      .min(1),
-  }),
+      items: z
+        .array(
+          z
+            .object({
+              label: z.string().min(1),
+              title: z.string().min(1),
+              text: z.string().min(1).optional(),
+              /** Unpublished site paths hide the link line. */
+              href: siteOrHttps.optional(),
+              linkLabel: z.string().min(1).optional(),
+              /** A post `series` name; its published posts are listed in order. */
+              series: z.string().min(1).optional(),
+            })
+            .refine((item) => (item.href === undefined) === (item.linkLabel === undefined), {
+              message: 'href and linkLabel go together',
+            }),
+        )
+        .min(1),
+      history: z
+        .array(
+          z.object({
+            date: z.coerce.date(),
+            note: z.string().min(1).optional(),
+            changes: z.array(z.object({ kind: z.enum(CHANGE_KINDS), text: z.string().min(1) })).min(1),
+          }),
+        )
+        .min(1),
+    })
+    .superRefine((entry, ctx) => {
+      const message = historyDateMismatch(entry.updatedAt, entry.history);
+      if (message) ctx.addIssue({ code: 'custom', message, path: ['updatedAt'] });
+    }),
 });
 
 /** About-page content per locale: `about/pt.json`. Headings and buttons live in `src/i18n/ui.ts`. */

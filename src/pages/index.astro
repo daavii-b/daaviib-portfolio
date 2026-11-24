@@ -2,9 +2,9 @@
 import AvailabilityLine from '@/components/AvailabilityLine.astro';
 import ClosingBox from '@/components/ClosingBox.astro';
 import CopyEmailButton from '@/components/CopyEmailButton.astro';
-import DefinitionList from '@/components/DefinitionList.astro';
 import ExperienceList from '@/components/ExperienceList.astro';
 import Icon from '@/components/icons/Icon.astro';
+import NowStatus from '@/components/NowStatus.astro';
 import PostList from '@/components/PostList.astro';
 import ProjectCard from '@/components/ProjectCard.astro';
 import SectionHeader from '@/components/SectionHeader.astro';
@@ -14,7 +14,7 @@ import { DEFAULT_LOCALE } from '@/i18n/config';
 import { localizePath, t } from '@/i18n/utils';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getExperiences, getNow, getPosts, getProjects, getPublishedPaths } from '@/lib/collections';
-import { resolveInternalLink } from '@/lib/links';
+import { parseStatus, resolveStatus } from '@/lib/now';
 
 const lang = DEFAULT_LOCALE;
 const [posts, projects, experiences, now, publishedPaths] = await Promise.all([
@@ -26,23 +26,20 @@ const [posts, projects, experiences, now, publishedPaths] = await Promise.all([
 ]);
 const latestPosts = posts.slice(0, 3);
 const featured = projects.filter((project) => project.data.featured);
-const nowItems = (now?.data.items ?? []).map((item) => ({
-  term: item.label,
-  text: item.text,
-  href: resolveInternalLink(item.href, publishedPaths),
-}));
+const nowStatus = now ? resolveStatus(parseStatus(now.data.status), publishedPaths) : [];
+const nowDate = now?.data.updatedAt.toISOString().slice(0, 10);
 const mailto = `mailto:${SITE.contact.email}`;
 ---
 
 <BaseLayout description={t(lang, 'home.description')} contact={{ kind: 'home' }}>
   <div class="mx-auto max-w-content px-5 pb-14 md:px-10 md:pb-24">
-    <section aria-labelledby="hero" class="grid items-end gap-12 pt-12 md:grid-cols-12 md:pt-28">
-      <div class="flex flex-col gap-5 md:col-span-7 md:gap-6">
+    <section aria-labelledby="hero" class="pt-12 md:pt-28">
+      <div class="flex flex-col gap-5 md:gap-6">
         <AvailabilityLine lang={lang} />
         <h1 id="hero" class="text-display-xl">
           {t(lang, 'home.title')}
         </h1>
-        <p class="text-lg text-text-muted md:text-xl">{t(lang, 'home.intro')}</p>
+        <p class="max-w-lead text-lg text-text-muted md:text-xl">{t(lang, 'home.intro')}</p>
         <div class="mt-2 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
           <Button href={localizePath('/projects', lang)} variant="primary" size="lg">
             {t(lang, 'home.seeProjects')}
@@ -54,20 +51,19 @@ const mailto = `mailto:${SITE.contact.email}`;
         </div>
       </div>
 
-      {now && nowItems.length > 0 && (
-        <section aria-labelledby="now" class="rounded-lg border border-border bg-bg p-6 md:col-span-5">
-          <div class="mb-2 flex items-baseline justify-between gap-3">
-            <h2 id="now" class="text-heading-sm">
-              {t(lang, 'now.title')}
-            </h2>
-            <time datetime={now.data.updatedAt.toISOString().slice(0, 10)} class="text-meta text-text-muted">
-              {now.data.updatedAt.toISOString().slice(0, 10)}
-            </time>
-          </div>
-          <DefinitionList items={nowItems} termWidth="narrow" closed={false} />
+      {now && (
+        <section aria-labelledby="now" class="mt-10 max-w-lead border-t border-border pt-6 md:mt-12">
+          <h2 id="now" class="text-eyebrow mb-2 text-text-muted">
+            {t(lang, 'now.title')}
+            <span class="text-meta tracking-normal normal-case">
+              {' · '}
+              <time datetime={nowDate}>{nowDate}</time>
+            </span>
+          </h2>
+          <NowStatus segments={nowStatus} />
           <a
             href={localizePath('/now', lang)}
-            class="group/more mt-2 inline-flex items-center gap-1.5 py-2.5 text-[15px] font-semibold text-accent hover:text-accent-hover"
+            class="group/more mt-1 inline-flex items-center gap-1.5 py-2.5 text-[15px] font-semibold text-accent hover:text-accent-hover"
           >
             {t(lang, 'home.nowLink')}
             <span aria-hidden="true" class="transition-transform duration-200 group-hover/more:translate-x-1">

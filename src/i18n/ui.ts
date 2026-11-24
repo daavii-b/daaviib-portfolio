@@ -85,6 +85,17 @@ const pt = {
   'about.closingTitle': 'Vamos trabalhar juntos?',
   'about.closingText': 'Estou aberto a projetos PJ e freelas. A mensagem já vem escrita.',
   'now.updatedOn': 'Atualizado em',
+  'now.intro':
+    'Uma página {link}: o que tenho feito nas últimas semanas. Atualizo quando algo começa, muda ou termina.',
+  'now.introLink': 'now',
+  'now.seeTimeline': 'ver linha do tempo',
+  'now.timeline': 'Linha do tempo',
+  'now.timelineIntro': 'O que começou, mudou ou terminou a cada atualização.',
+  'now.legend': 'Legenda',
+  'now.current': 'atual',
+  'now.change.added': 'entrou',
+  'now.change.changed': 'mudou',
+  'now.change.removed': 'saiu',
   'now.description':
     'O que Davi Brito está fazendo agora: trabalho, estudos e projetos em andamento, atualizado com frequência.',
   'about.description':
@@ -188,6 +199,17 @@ const en: Record<UiKey, string> = {
   'about.closingTitle': 'Shall we work together?',
   'about.closingText': 'I’m open to contract and freelance work. The message comes already written.',
   'now.updatedOn': 'Updated on',
+  'now.intro':
+    'A {link} page: what I have been doing in the last few weeks. I update it when something starts, changes or ends.',
+  'now.introLink': 'now',
+  'now.seeTimeline': 'see the timeline',
+  'now.timeline': 'Timeline',
+  'now.timelineIntro': 'What started, changed or ended in each update.',
+  'now.legend': 'Legend',
+  'now.current': 'current',
+  'now.change.added': 'added',
+  'now.change.changed': 'changed',
+  'now.change.removed': 'removed',
   'now.description': 'What Davi Brito is doing now: work, studies and projects in progress, updated often.',
   'about.description':
     'Who Davi Brito is: a Fullstack Engineer building B2B SaaS platforms. Background, experience, tools and education.',
