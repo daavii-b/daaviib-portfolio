@@ -44,9 +44,10 @@ test.describe('contact dialog', () => {
     await context.grantPermissions(['clipboard-read', 'clipboard-write']);
     await page.goto('/');
     await page.getByRole('banner').getByRole('link', { name: 'Contato' }).click();
-    await page.getByRole('button', { name: 'Copiar email' }).click();
+    const dialog = page.getByRole('dialog');
+    await dialog.getByRole('button', { name: 'Copiar email' }).click();
 
-    await expect(page.getByRole('status')).toHaveText('Email copiado');
+    await expect(dialog.getByRole('status')).toHaveText('Email copiado');
     expect(await page.evaluate(() => navigator.clipboard.readText())).toBe('brit.davi122@gmail.com');
   });
 

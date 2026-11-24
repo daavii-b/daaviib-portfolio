@@ -1,15 +1,35 @@
 ---
-import BaseLayout from '@/layouts/BaseLayout.astro';
+import DefinitionList from '@/components/DefinitionList.astro';
 import { DEFAULT_LOCALE } from '@/i18n/config';
-import { t } from '@/i18n/utils';
+import { formatDate, t } from '@/i18n/utils';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getNow, getPublishedPaths } from '@/lib/collections';
+import { resolveInternalLink } from '@/lib/links';
 
 const lang = DEFAULT_LOCALE;
+const [now, publishedPaths] = await Promise.all([getNow(lang), getPublishedPaths(lang)]);
+const items = (now?.data.items ?? []).map((item) => ({
+  term: item.label,
+  text: item.text,
+  href: resolveInternalLink(item.href, publishedPaths),
+}));
 ---
 
 <BaseLayout title={t(lang, 'now.title')} section={t(lang, 'nav.now')} contact={{ kind: 'other' }}>
   <div class="mx-auto max-w-measure px-5 pt-12 pb-24 md:px-10 md:pt-24">
-    <h1 class="text-display-lg mb-6">{t(lang, 'now.title')}</h1>
-    <!-- TODO: what you are focused on right now (see nownownow.com). -->
-    <p class="text-text-muted">Em breve.</p>
+    <h1 class="text-display-lg">{t(lang, 'now.title')}</h1>
+    {now && (
+      <p class="text-meta mt-4 text-text-muted">
+        {`${t(lang, 'now.updatedOn')} `}
+        <time datetime={now.data.updatedAt.toISOString().slice(0, 10)}>
+          {formatDate(now.data.updatedAt, lang)}
+        </time>
+      </p>
+    )}
+    {items.length > 0 && (
+      <div class="mt-8">
+        <DefinitionList items={items} />
+      </div>
+    )}
   </div>
 </BaseLayout>
