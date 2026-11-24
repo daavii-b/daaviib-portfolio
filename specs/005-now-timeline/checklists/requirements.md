@@ -31,8 +31,11 @@
 
 ## Notes
 
-- Metadata names (`og:image`, `twitter:image`, `BlogPosting`) are kept in FR-007/FR-008 because they are the external
-  contract social networks read, not an implementation choice.
-- Visual values (1200×630, 16px dot step, 12px square, < 300 KB) come from the request and the design system.
-- No clarification needed: the request fixed content, layout, fonts, sizes and titles; remaining choices are recorded
-  in Assumptions.
+- "The build MUST fail" (FR-011) and "https" (FR-010) are kept because they are the author-facing contract of the
+  content file, not an implementation choice; how the sentence and its links are stored is left to the plan.
+- Visual values (~760px reading width, monospace signs, accent on the current node, hollow older nodes) come from the
+  approved **Home** and **Agora** screens and the design system.
+- One deliberate difference from the approved screen: drafts in a series are not listed ("em breve" is not shipped),
+  per SC-004 and the Edge Cases.
+- No clarification needed: the request and the approved screens fixed content, layout and order; remaining choices are
+  recorded in Assumptions.
