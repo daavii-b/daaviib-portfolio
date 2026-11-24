@@ -4,6 +4,7 @@ import type { Locale } from '@/i18n/config';
 import { t } from '@/i18n/utils';
 import { contactMessage, contactSubject, mailtoUrl, whatsappUrl, type ContactContext } from '@/lib/contact';
 
+import AvailabilityLine from './AvailabilityLine.astro';
 import Icon, { type IconName } from './icons/Icon.astro';
 
 /**
@@ -81,12 +82,7 @@ if (schedulingUrl) {
       </form>
     </div>
 
-    {SITE.availability.open && (
-      <p class="-mt-2 flex items-center gap-2 text-[13px] font-medium text-text-muted">
-        <span aria-hidden="true" class="size-2 rounded-full bg-success" />
-        {SITE.availability.label[lang]}
-      </p>
-    )}
+    <AvailabilityLine lang={lang} size="sm" class="-mt-2" />
 
     <div class="flex flex-col gap-2">
       <label for="contact-message" class="text-[13px] font-medium">
@@ -189,6 +185,7 @@ if (schedulingUrl) {
 
 <script>
   import { mailtoUrl, whatsappUrl } from '@/lib/contact';
+  import { copyText, flagCopied } from '@/scripts/clipboard';
 
   const dialog = document.querySelector<HTMLDialogElement>('#contact-dialog');
 
@@ -200,7 +197,6 @@ if (schedulingUrl) {
     const copyButton = dialog.querySelector<HTMLButtonElement>('[data-contact-copy]');
     const copyLabel = copyButton?.querySelector<HTMLElement>('[data-label]');
     const toast = dialog.querySelector<HTMLElement>('[data-contact-toast]');
-    let toastTimer: number | undefined;
 
     for (const trigger of document.querySelectorAll<HTMLElement>('[data-contact-open]')) {
       trigger.addEventListener('click', (event) => {
@@ -225,27 +221,18 @@ if (schedulingUrl) {
     });
 
     copyButton?.addEventListener('click', async () => {
-      try {
-        await navigator.clipboard.writeText(email);
-      } catch {
-        // Clipboard unavailable: select the address so the visitor can copy it.
-        const node = dialog.querySelector('#contact-email');
-        if (node) window.getSelection()?.selectAllChildren(node);
-      }
-      copyButton.dataset.copied = '';
-      if (copyLabel && toast) copyLabel.textContent = toast.dataset.copiedLabel ?? '';
+      await copyText(email, dialog.querySelector('#contact-email'));
       const toastText = toast?.querySelector<HTMLElement>('[data-toast-text]');
+      if (copyLabel && toast) copyLabel.textContent = toast.dataset.copiedLabel ?? '';
       if (toast && toastText) {
         toastText.textContent = toast.dataset.toastLabel ?? '';
         toast.dataset.visible = '';
       }
-      window.clearTimeout(toastTimer);
-      toastTimer = window.setTimeout(() => {
+      flagCopied(copyButton, () => {
         if (toast) delete toast.dataset.visible;
         if (toastText) toastText.textContent = '';
-        delete copyButton.dataset.copied;
         if (copyLabel && toast) copyLabel.textContent = toast.dataset.copyLabel ?? '';
-      }, 2000);
+      });
     });
   }
 </script>

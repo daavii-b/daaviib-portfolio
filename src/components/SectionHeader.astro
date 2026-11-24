@@ -1,0 +1,28 @@
+---
+/** Section heading (h2) with an optional "label →" link on the right, as on the Home page sections. */
+interface Props {
+  id: string;
+  title: string;
+  href?: string | undefined;
+  linkLabel?: string | undefined;
+}
+
+const { id, title, href, linkLabel } = Astro.props;
+---
+
+<div class="flex items-baseline justify-between gap-4">
+  <h2 id={id} class="text-heading-lg">
+    {title}
+  </h2>
+  {href && linkLabel && (
+    <a
+      href={href}
+      class="group/more inline-flex flex-none items-center gap-1.5 py-3 text-[15px] font-semibold text-accent hover:text-accent-hover"
+    >
+      {linkLabel}
+      <span aria-hidden="true" class="transition-transform duration-200 group-hover/more:translate-x-1">
+        →
+      </span>
+    </a>
+  )}
+</div>

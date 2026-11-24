@@ -1,0 +1,52 @@
+---
+import { SITE } from '@/config/site';
+import type { Locale } from '@/i18n/config';
+import { t } from '@/i18n/utils';
+
+import Icon from './icons/Icon.astro';
+import Button from './ui/Button.astro';
+
+/**
+ * Secondary button showing the email in mono; a click copies it. The copy icon turns into a check and a polite
+ * status region announces "Email copiado". Without JavaScript the address stays readable on the button.
+ */
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const { email } = SITE.contact;
+---
+
+<span class="contents" data-copy-email-root>
+  <Button size="lg" solid class="font-mono text-[15px]" data-copy-email={email}>
+    <Icon name="copy" size={16} class="in-data-[copied]:hidden" />
+    <Icon name="check" size={16} class="hidden text-success in-data-[copied]:block" />
+    <span class="sr-only">{t(lang, 'contact.copy')}:</span>
+    <span data-copy-email-text>{email}</span>
+  </Button>
+  <span
+    role="status"
+    class="sr-only"
+    data-copy-email-status
+    data-message={t(lang, 'contact.copiedToast')}
+  ></span>
+</span>
+
+<script>
+  import { copyText, flagCopied } from '@/scripts/clipboard';
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-copy-email-root]')) {
+    const button = root.querySelector<HTMLButtonElement>('[data-copy-email]');
+    const status = root.querySelector<HTMLElement>('[data-copy-email-status]');
+    if (!button || !status) continue;
+
+    button.addEventListener('click', async () => {
+      await copyText(button.dataset.copyEmail ?? '', button.querySelector('[data-copy-email-text]'));
+      status.textContent = status.dataset.message ?? '';
+      flagCopied(button, () => {
+        status.textContent = '';
+      });
+    });
+  }
+</script>

@@ -1,0 +1,26 @@
+---
+/**
+ * End-of-page call to action on the dot-grid surface ("Vamos conversar?", "Vamos trabalhar juntos?").
+ * Actions go in the default slot; use `Button` with `solid` for secondary actions so the dots don't show through.
+ */
+interface Props {
+  id: string;
+  title: string;
+  text: string;
+}
+
+const { id, title, text } = Astro.props;
+---
+
+<section
+  aria-labelledby={id}
+  class="bg-dots flex flex-col items-start gap-4 rounded-lg border border-border bg-surface px-5 py-10 sm:px-12 sm:py-16"
+>
+  <h2 id={id} class="-ml-2 bg-surface px-2 text-display-lg">
+    {title}
+  </h2>
+  <p class="max-w-[520px] bg-surface text-lg text-text-muted">{text}</p>
+  <div class="mt-2 flex flex-wrap gap-3">
+    <slot />
+  </div>
+</section>

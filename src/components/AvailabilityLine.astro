@@ -1,0 +1,27 @@
+---
+import { SITE } from '@/config/site';
+import type { Locale } from '@/i18n/config';
+
+/** "Open to work" line with a green dot, from `SITE.availability`. Renders nothing when availability is off. */
+interface Props {
+  lang: Locale;
+  size?: 'sm' | 'md';
+  class?: string;
+}
+
+const { lang, size = 'md', class: className } = Astro.props;
+const open: boolean = SITE.availability.open;
+---
+
+{open && (
+  <p
+    class:list={[
+      'flex items-center gap-2 font-medium text-text-muted',
+      size === 'sm' ? 'text-[13px]' : 'text-sm',
+      className,
+    ]}
+  >
+    <span aria-hidden="true" class="size-2 flex-none rounded-full bg-success" />
+    {SITE.availability.label[lang]}
+  </p>
+)}

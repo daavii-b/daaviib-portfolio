@@ -1,0 +1,54 @@
+---
+/**
+ * Label/value rows on hairline borders (Now panel, /now, tools, education).
+ * `narrow` keeps the 112px label column at every width; `wide` uses 180px and stacks on small screens.
+ */
+export interface DefinitionItem {
+  term: string;
+  text: string;
+  /** Muted suffix after the text, e.g. the institution in "Course · Institution". */
+  detail?: string | undefined;
+  /** Already resolved link (see `resolveInternalLink`); absent = plain text. */
+  href?: string | undefined;
+}
+
+interface Props {
+  items: DefinitionItem[];
+  termStyle?: 'eyebrow' | 'meta';
+  termWidth?: 'narrow' | 'wide';
+  /** Close the list with a bottom border (lists in the page flow) or not (inside a bordered panel). */
+  closed?: boolean;
+}
+
+const { items, termStyle = 'eyebrow', termWidth = 'wide', closed = true } = Astro.props;
+---
+
+<dl class:list={[closed && 'border-b border-border']}>
+  {items.map((item) => (
+    <div
+      class:list={[
+        'grid items-baseline border-t border-border py-3.5',
+        termWidth === 'narrow'
+          ? 'grid-cols-[112px_minmax(0,1fr)] gap-3'
+          : 'gap-1 sm:grid-cols-[180px_minmax(0,1fr)] sm:gap-8',
+      ]}
+    >
+      <dt class:list={['text-text-muted', termStyle === 'eyebrow' ? 'text-eyebrow' : 'text-meta']}>
+        {item.term}
+      </dt>
+      <dd class="text-base text-text">
+        {item.href ? (
+          <a
+            href={item.href}
+            class="underline decoration-border-strong underline-offset-4 hover:text-accent hover:decoration-accent"
+          >
+            {item.text}
+          </a>
+        ) : (
+          item.text
+        )}
+        {item.detail && <span class="text-text-muted"> · {item.detail}</span>}
+      </dd>
+    </div>
+  ))}
+</dl>
