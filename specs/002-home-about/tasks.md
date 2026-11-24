@@ -106,7 +106,7 @@ description: 'Task list for the complete Home and About pages'
 
 - [x] T030 Update `CLAUDE.md` (component list) and `docs/architecture.md` (new collections) — no new principles
 - [x] T031 Run the quality gate: `pnpm format`, `pnpm lint`, `pnpm check`, `pnpm test:coverage`, `pnpm build`, `pnpm test:e2e` (axe both themes, desktop and mobile), `pnpm lhci`; measure the gzipped size of the Home page's new script in `dist/_astro` (< 1 KB, SC-004)
-- [ ] T032 Mark tasks done, re-check spec/plan against what was built, open the PR with the template
+- [x] T032 Mark tasks done, re-check spec/plan against what was built, open the PR with the template
 
 ---
 
