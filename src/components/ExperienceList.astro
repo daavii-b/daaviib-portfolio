@@ -1,0 +1,49 @@
+---
+import type { Locale } from '@/i18n/config';
+import type { Experience } from '@/lib/collections';
+import { formatPeriod, localized } from '@/lib/experience';
+
+/**
+ * Work history: period (mono) on the left, "role · company" and either the one-line summary (Home)
+ * or every highlight (About). Study entries show the period in years.
+ */
+interface Props {
+  experiences: Experience[];
+  lang: Locale;
+  variant: 'summary' | 'highlights';
+}
+
+const { experiences, lang, variant } = Astro.props;
+const compact = variant === 'summary';
+---
+
+<ol class="border-b border-border">
+  {experiences.map(({ data }) => (
+    <li
+      class:list={[
+        'grid border-t border-border',
+        compact
+          ? 'gap-2 py-5 sm:grid-cols-[220px_minmax(0,1fr)] sm:gap-6'
+          : 'gap-3 py-7 sm:grid-cols-[180px_minmax(0,1fr)] sm:gap-8',
+      ]}
+    >
+      <p class="text-meta text-text-muted sm:leading-relaxed">
+        {formatPeriod(data.start, data.end, lang, data.kind === 'study' ? 'year' : 'month')}
+      </p>
+      <div class:list={['flex flex-col', compact ? 'gap-1.5' : 'gap-2.5']}>
+        <h3 class="text-heading-sm">
+          {localized(data.role, lang)} <span class="font-medium text-text-muted">· {data.company}</span>
+        </h3>
+        {compact
+          ? data.summary && <p class="text-[15px] text-text-muted">{localized(data.summary, lang)}</p>
+          : data.highlights.length > 0 && (
+              <ul class="flex list-disc flex-col gap-1.5 pl-[18px] text-text-muted">
+                {data.highlights.map((highlight) => (
+                  <li class="pl-0.5">{localized(highlight, lang)}</li>
+                ))}
+              </ul>
+            )}
+      </div>
+    </li>
+  ))}
+</ol>

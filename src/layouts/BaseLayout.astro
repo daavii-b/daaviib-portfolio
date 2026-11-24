@@ -12,7 +12,7 @@ import type { ContactContext } from '@/lib/contact';
 
 interface Props {
   title?: string;
-  description?: string;
+  description?: string | undefined;
   /** Section shown in the header after the author's name ("Davi Brito — Blog"). */
   section?: string;
   /** What the pre-filled contact message refers to. */

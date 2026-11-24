@@ -8,17 +8,19 @@ import type { HTMLAttributes } from 'astro/types';
 type Props = (HTMLAttributes<'a'> & HTMLAttributes<'button'>) & {
   variant?: 'primary' | 'secondary' | 'ghost';
   size?: 'md' | 'lg';
+  /** Secondary on a patterned surface (dot grid): give it the page background instead of transparency. */
+  solid?: boolean;
   href?: string;
 };
 
-const { variant = 'secondary', size = 'md', href, class: className, ...rest } = Astro.props;
+const { variant = 'secondary', size = 'md', solid = false, href, class: className, ...rest } = Astro.props;
 
 const base =
   'inline-flex items-center justify-center gap-2 rounded-md font-medium whitespace-nowrap transition-colors duration-[120ms] ease-out active:translate-y-px disabled:pointer-events-none disabled:opacity-50';
 const sizes = { md: 'min-h-11 px-4 text-sm', lg: 'min-h-12 px-6 text-base' };
 const variants = {
   primary: 'bg-accent text-on-accent hover:bg-accent-hover',
-  secondary: 'border border-border-strong bg-transparent text-text hover:bg-surface',
+  secondary: `border border-border-strong text-text hover:bg-surface ${solid ? 'bg-bg' : 'bg-transparent'}`,
   ghost: 'bg-transparent text-text-muted hover:bg-surface hover:text-text',
 };
 const classes = [base, sizes[size], variants[variant], className];

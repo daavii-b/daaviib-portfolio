@@ -63,6 +63,20 @@ const pt = {
     'Se quiser trocar uma ideia sobre o que escrevi aqui, me chama. A mensagem já vai com o nome deste artigo.',
   'cta.projectTitle': 'Quer saber mais sobre {name}?',
   'cta.projectText': 'Conto os detalhes que não couberam aqui. A mensagem já vai com o nome do projeto.',
+  'home.nowLink': 'Página Agora',
+  'home.aboutLink': 'Sobre mim',
+  'home.closingTitle': 'Vamos conversar?',
+  'home.closingText': 'Sobre uma vaga, um projeto ou algo que você leu aqui. A mensagem já vem escrita.',
+  'about.greeting': 'Oi, eu sou o Davi.',
+  'about.story': 'Como comecei',
+  'about.tools': 'Ferramentas do dia a dia',
+  'about.education': 'Formação e idiomas',
+  'about.languages': 'Idiomas',
+  'about.cv': 'Baixar CV (PDF)',
+  'about.photoAlt': 'Foto de Davi Brito',
+  'about.closingTitle': 'Vamos trabalhar juntos?',
+  'about.closingText': 'Estou aberto a projetos PJ e freelas. A mensagem já vem escrita.',
+  'now.updatedOn': 'Atualizado em',
 } as const;
 
 export type UiKey = keyof typeof pt;
@@ -127,6 +141,21 @@ const en: Record<UiKey, string> = {
   'cta.projectTitle': 'Want to know more about {name}?',
   'cta.projectText':
     'I can share the details that did not fit here. The message already includes the project’s name.',
+  'home.nowLink': 'Now page',
+  'home.aboutLink': 'About me',
+  'home.closingTitle': 'Shall we talk?',
+  'home.closingText':
+    'About a role, a project or something you read here. The message comes already written.',
+  'about.greeting': 'Hi, I’m Davi.',
+  'about.story': 'How I started',
+  'about.tools': 'Everyday tools',
+  'about.education': 'Education and languages',
+  'about.languages': 'Languages',
+  'about.cv': 'Download CV (PDF)',
+  'about.photoAlt': 'Photo of Davi Brito',
+  'about.closingTitle': 'Shall we work together?',
+  'about.closingText': 'I’m open to contract and freelance work. The message comes already written.',
+  'now.updatedOn': 'Updated on',
 };
 
 export const ui: Record<Locale, Record<UiKey, string>> = { pt, en };

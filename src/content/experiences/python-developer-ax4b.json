@@ -1,0 +1,16 @@
+{
+  "company": "AX4B",
+  "role": { "pt": "Full Stack Python Developer" },
+  "kind": "work",
+  "start": "2023-05",
+  "end": "2023-08",
+  "summary": {
+    "pt": "Primeiro emprego na área: funcionalidades contábeis de ERP com Python e Odoo, e APIs em Django REST integradas a front-ends React."
+  },
+  "highlights": [
+    {
+      "pt": "Primeiro emprego na área: funcionalidades contábeis de ERP com Python e Odoo, transformando regras de negócio em software."
+    },
+    { "pt": "APIs com Django REST Framework integradas a front-ends em React e TypeScript." }
+  ]
+}

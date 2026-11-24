@@ -1,0 +1,13 @@
+{
+  "lang": "pt",
+  "updatedAt": "2026-11-23",
+  "items": [
+    { "label": "Construindo", "text": "Prumo", "href": "/projects/prumo" },
+    { "label": "Escrevendo", "text": "A série “Construindo este site”" },
+    {
+      "label": "Estudando",
+      "text": "ADS na UniCesumar, algoritmos e IA aplicada ao desenvolvimento (SDD e RAG)"
+    },
+    { "label": "Aprendendo", "text": "Astro, construindo este site com ele" }
+  ]
+}

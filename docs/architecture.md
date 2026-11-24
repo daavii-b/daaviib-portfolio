@@ -23,7 +23,7 @@ Reader ──POST /api/newsletter/subscribe──▶ Serverless API ──▶ Po
 | Decision   | Choice                                                                                                           | Revisit when                                                    |
 | ---------- | ---------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
 | Framework  | Astro, static output                                                                                             | —                                                               |
-| Content    | MDX in Git, Zod-validated collections                                                                            | Someone else needs to write → headless CMS reading the same MDX |
+| Content    | MDX/JSON in Git, Zod-validated collections (`posts`, `projects`, `experiences`, `now`, `about`)                  | Someone else needs to write → headless CMS reading the same MDX |
 | i18n       | `pt` default (no prefix), `en` under `/en/`; English route segments, translated slugs linked by `translationKey` | —                                                               |
 | Newsletter | Own implementation, post-v1, multiple lists (per project/topic), double opt-in, email = summary + link           | Maintenance outweighs value → managed service                   |
 | Hosting    | Vercel                                                                                                           | Build > 5 min or cost                                           |

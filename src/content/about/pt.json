@@ -1,0 +1,41 @@
+{
+  "lang": "pt",
+  "lead": "Desenvolvo produtos da ideia à produção: definição de features, arquitetura e escolha de tecnologias. Há mais de 3 anos construo plataformas SaaS B2B na AX4B com TypeScript, NestJS e Next.js.",
+  "story": [
+    "Comecei pela segurança. Assistindo aos vídeos do Gabriel Pato, ouvi uma ideia que ficou: para desmontar algo, você precisa saber montar. Em 2020 fui aprender a montar.",
+    "Estudei Python, Django, Django REST, React, TypeScript e Node.js, sempre com projetos próprios, e junto vieram Clean Architecture, TDD, DDD e design patterns. No caminho descobri que gostava mais de construir do que de desmontar, e fiquei.",
+    "Hoje o que mais me interessa é arquitetura de software: entender como aplicações complexas funcionam e reproduzi-las seguindo os padrões da indústria. É daí que vêm os temas que estudo e sobre os quais escrevo, como outbox pattern, resiliência, teorema CAP e microsserviços."
+  ],
+  "tools": [
+    { "label": "Linguagens", "items": ["TypeScript", "JavaScript", "Python", "SQL"] },
+    {
+      "label": "Back-end",
+      "items": ["Node.js", "NestJS", "Fastify", "Express", "Django", "Django REST", "BullMQ"]
+    },
+    {
+      "label": "Front-end",
+      "items": ["React", "Next.js", "TanStack Query", "Tailwind CSS", "shadcn/ui", "Zod"]
+    },
+    { "label": "Dados", "items": ["PostgreSQL", "MongoDB", "Redis", "Prisma"] },
+    {
+      "label": "Arquitetura",
+      "items": ["Clean Architecture", "DDD", "SOLID", "TDD", "design patterns", "RBAC/ABAC", "idempotência"]
+    },
+    {
+      "label": "Cloud e DevOps",
+      "items": ["AWS (EC2, S3, ECS)", "Docker", "GitHub Actions", "Semantic Release", "Better Stack"]
+    },
+    {
+      "label": "IA no desenvolvimento",
+      "items": ["Claude", "Codex CLI", "spec-driven development", "MCP", "revisão crítica de código gerado"]
+    }
+  ],
+  "education": [
+    {
+      "period": "out 2026 — em curso",
+      "title": "Tecnólogo em Análise e Desenvolvimento de Sistemas",
+      "institution": "UniCesumar"
+    }
+  ],
+  "languages": "Português nativo, inglês intermediário"
+}
